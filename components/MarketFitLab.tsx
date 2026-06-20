@@ -199,8 +199,8 @@ export function MarketFitLab() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_18%_0%,rgba(44,230,181,0.18),transparent_32%),radial-gradient(circle_at_86%_12%,rgba(0,107,255,0.14),transparent_30%),linear-gradient(180deg,#F4F8FF_0%,#FFFFFF_46%,#EFF6FF_100%)] text-slate-950">
-      <header className="sticky top-0 z-30 border-b border-blue-100/80 bg-white/88 shadow-sm shadow-blue-950/5 backdrop-blur-xl">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_14%_0%,rgba(44,230,181,0.10),transparent_28%),radial-gradient(circle_at_88%_8%,rgba(0,107,255,0.10),transparent_26%),linear-gradient(180deg,#F7FAFF_0%,#FFFFFF_48%,#F8FBFF_100%)] text-slate-950">
+      <header className="sticky top-0 z-30 border-b border-blue-100 bg-white/95 shadow-sm shadow-blue-950/5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
           <div className="flex min-w-0 items-center gap-3">
             <Image
@@ -214,7 +214,7 @@ export function MarketFitLab() {
               <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#006BFF]">
                 Market Fit Lab
               </p>
-              <h1 className="truncate text-base font-black tracking-[-0.04em] sm:text-xl">
+              <h1 className="truncate text-base font-black tracking-[-0.025em] sm:text-xl">
                 Strategy Report Dashboard
               </h1>
             </div>
@@ -265,26 +265,26 @@ export function MarketFitLab() {
             </div>
           )}
 
-          <section className="min-w-0 overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_83%_18%,rgba(44,230,181,0.48),transparent_19%),radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.18),transparent_26%),linear-gradient(135deg,#0086FF_0%,#006BFF_48%,#0647D7_100%)] text-white shadow-2xl shadow-[#006BFF]/20 sm:rounded-[32px]">
+          <section className="min-w-0 overflow-hidden rounded-[24px] border border-blue-100 bg-white text-slate-950 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:rounded-[32px]">
             <div className="grid min-w-0 gap-6 p-5 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:p-10">
               <div className="flex min-w-0 flex-col justify-between gap-8 sm:gap-10">
                 <div className="min-w-0">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-xs font-black text-white shadow-sm shadow-blue-950/10">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-[#EAF3FF] px-3 py-1.5 text-xs font-black text-[#006BFF]">
                     <Sparkles size={14} />
                     Mock OpenAI Analysis
                   </span>
-                  <h2 className="mt-5 max-w-2xl text-3xl font-black leading-tight tracking-[-0.05em] sm:text-4xl lg:text-5xl">
+                  <h2 className="mt-5 max-w-2xl text-3xl font-black leading-tight tracking-[-0.03em] text-slate-950 sm:text-4xl lg:text-5xl">
                     브랜드 정보를 입력하면 전략 보고서까지 자동 정리합니다.
                   </h2>
-                  <p className="mt-4 max-w-2xl text-base leading-7 text-blue-50/92">
+                  <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-slate-700">
                     실제 OpenAI API 대신 전문가 수준의 mock 분석 데이터를 불러오며,
                     추후 API 연결을 위해 service layer를 분리했습니다.
                   </p>
-                  <div className="mt-5 rounded-[22px] border border-white/20 bg-white/15 p-4 text-sm font-bold leading-7 text-white shadow-lg shadow-blue-950/10 sm:rounded-[26px] sm:p-5">
+                  <div className="mt-5 rounded-[22px] border border-blue-100 bg-[#F7FBFF] p-4 text-sm font-bold leading-7 text-slate-800 shadow-sm sm:rounded-[26px] sm:p-5">
                     {productPositioningStatement}
                   </div>
                 </div>
-                <AnalysisWorkflow variant="dark" />
+                <AnalysisWorkflow variant="light" />
               </div>
 
               <ProjectForm
@@ -385,10 +385,10 @@ function ProjectForm({
   ];
 
   return (
-    <div className="min-w-0 rounded-[24px] border border-white/35 bg-white/95 p-4 text-slate-950 shadow-2xl shadow-[#005BEA]/20 backdrop-blur sm:rounded-[28px] sm:p-5">
+    <div className="min-w-0 rounded-[24px] border border-blue-100 bg-white p-4 text-slate-950 shadow-[0_18px_48px_rgba(0,107,255,0.10)] sm:rounded-[28px] sm:p-5">
       <div className="mb-5 flex items-center justify-between gap-3">
         <div>
-          <h3 className="text-lg font-black tracking-[-0.04em]">프로젝트 입력</h3>
+          <h3 className="text-lg font-black tracking-[-0.025em]">프로젝트 입력</h3>
           <p className="mt-1 text-xs font-semibold text-slate-500">
             {competitorCount}개 경쟁사 입력됨
           </p>
@@ -445,10 +445,10 @@ function EmptyState({ loading }: { loading: boolean }) {
       <div className="mx-auto grid size-16 place-items-center rounded-3xl bg-[#EAF3FF] text-[#006BFF]">
         {loading ? <Loader2 className="animate-spin" /> : <Clipboard />}
       </div>
-      <h3 className="mt-5 text-xl font-black tracking-[-0.04em] sm:text-2xl">
+      <h3 className="mt-5 text-xl font-black tracking-[-0.025em] sm:text-2xl">
         분석 시작 버튼을 누르면 대시보드가 생성됩니다.
       </h3>
-      <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+      <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-600">
         Executive Summary, 타겟 분석, 경쟁사 비교, 포지셔닝맵, USP, 메시지 전략,
         실행 우선순위, 최종 Markdown 리포트가 순서대로 표시됩니다.
       </p>
@@ -468,7 +468,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
         "min-w-0 rounded-[24px] border p-4 sm:rounded-[28px]",
         isDark
           ? "border-white/20 bg-white/[0.12]"
-          : "border-blue-100 bg-[#F7FBFF]",
+          : "border-blue-100 bg-[#FAFCFF]",
       )}
     >
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
@@ -483,7 +483,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
           </p>
           <h3
             className={cn(
-              "mt-1 text-base font-black tracking-[-0.04em] sm:text-lg",
+              "mt-1 text-base font-black tracking-[-0.025em] sm:text-lg",
               isDark ? "text-white" : "text-slate-950",
             )}
           >
@@ -544,7 +544,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
               <p
                 className={cn(
                   "mt-2 text-xs font-semibold leading-5",
-                  isDark ? "text-slate-400" : "text-slate-500",
+                  isDark ? "text-white/82" : "text-slate-600",
                 )}
               >
                 {step.description}
@@ -576,12 +576,12 @@ function AnalysisSections({
         featured
       >
         <div className="mb-5 grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <div className="min-w-0 rounded-[24px] bg-[radial-gradient(circle_at_90%_18%,rgba(44,230,181,0.55),transparent_20%),linear-gradient(135deg,#0086FF_0%,#006BFF_50%,#0647D7_100%)] p-5 text-white shadow-[0_18px_50px_rgba(0,107,255,0.22)] sm:rounded-[28px] sm:p-6">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-blue-50">
+          <div className="min-w-0 rounded-[24px] border border-blue-100 bg-[#F7FBFF] p-5 text-slate-950 shadow-[0_18px_46px_rgba(0,107,255,0.08)] sm:rounded-[28px] sm:p-6">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-[#006BFF]">
               <Lightbulb size={15} />
               Strategic Conclusion
             </div>
-            <p className="mt-5 text-xl font-black leading-8 tracking-[-0.04em] sm:text-2xl sm:leading-9 lg:text-3xl lg:leading-10">
+            <p className="mt-5 text-xl font-black leading-8 tracking-[-0.025em] text-slate-950 sm:text-2xl sm:leading-9 lg:text-3xl lg:leading-10">
               {analysis.executiveSummary.oneLineInsight}
             </p>
             <div className="mt-6 grid gap-3 md:grid-cols-3">
@@ -808,13 +808,13 @@ function AnalysisSections({
               <span className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857]">
                 {message.angle}
               </span>
-              <h3 className="mt-4 text-xl font-black leading-7 tracking-[-0.05em] text-slate-950 sm:text-2xl sm:leading-8">
+              <h3 className="mt-4 text-xl font-black leading-7 tracking-[-0.03em] text-slate-950 sm:text-2xl sm:leading-8">
                 {message.mainCopy}
               </h3>
               <p className="mt-3 rounded-2xl bg-[#EAF3FF] p-3 text-sm font-black leading-6 text-[#0758D8]">
                 {message.subCopy}
               </p>
-              <p className="mt-4 text-sm font-medium leading-6 text-slate-500">
+              <p className="mt-4 text-sm font-medium leading-6 text-slate-700">
                 {message.reason}
               </p>
             </div>
@@ -848,7 +848,7 @@ function AnalysisSections({
                 <h3 className="mt-1 text-lg font-black text-slate-950">
                   {priority.action}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="mt-2 text-sm leading-6 text-slate-700">
                   {priority.reason}
                 </p>
               </div>
@@ -928,7 +928,7 @@ function SectionCard({
           </p>
           <h2
             className={cn(
-              "mt-2 font-black tracking-[-0.04em] text-slate-950",
+              "mt-2 font-black tracking-[-0.025em] text-slate-950",
               featured
                 ? "text-2xl sm:text-3xl lg:text-4xl"
                 : "text-xl sm:text-2xl",
@@ -936,7 +936,7 @@ function SectionCard({
           >
             {title}
           </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
             {description}
           </p>
         </div>
@@ -949,11 +949,11 @@ function SectionCard({
 
 function MiniConclusion({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/15 p-4 shadow-sm shadow-blue-950/10">
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#BFFFEF]">
+    <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-sm shadow-blue-950/5">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#006BFF]">
         {label}
       </p>
-      <p className="mt-2 text-sm font-black leading-5 text-white">{value}</p>
+      <p className="mt-2 text-sm font-black leading-5 text-slate-900">{value}</p>
     </div>
   );
 }
@@ -981,7 +981,7 @@ function ScoreCard({
           <span className="text-sm font-black text-slate-900">
             {definition.label}
           </span>
-          <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">
+          <p className="mt-1 text-xs font-semibold leading-5 text-slate-600">
             {definition.description}
           </p>
         </div>
@@ -1007,7 +1007,7 @@ function ScoreCard({
         <span>0</span>
         <span>100</span>
       </div>
-      <p className="mt-4 rounded-2xl bg-slate-50 p-3 text-xs font-semibold leading-5 text-slate-600">
+      <p className="mt-4 rounded-2xl bg-slate-50 p-3 text-sm font-semibold leading-6 text-slate-700">
         <span className="font-black text-slate-900">해석: </span>
         {metric.reason}
       </p>
@@ -1084,7 +1084,7 @@ function InsightBox({
         )}
         <h3 className="text-sm font-black text-slate-900">{title}</h3>
       </div>
-      <p className="mt-3 text-sm font-semibold leading-6 text-slate-600">{body}</p>
+      <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{body}</p>
     </div>
   );
 }
@@ -1092,12 +1092,12 @@ function InsightBox({
 function PillGroup({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="mt-5">
-      <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+      <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
         {title}
       </p>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
-          <span key={item} className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white">
+          <span key={item} className="rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-bold text-[#0758D8] ring-1 ring-blue-100">
             {item}
           </span>
         ))}
@@ -1110,24 +1110,24 @@ function PersonaCard({ analysis }: { analysis: MarketingAnalysis }) {
   const persona = analysis.targetAnalysis.persona;
 
   return (
-    <div className="min-w-0 rounded-[24px] bg-[radial-gradient(circle_at_88%_14%,rgba(44,230,181,0.45),transparent_20%),linear-gradient(135deg,#007BFF_0%,#006BFF_54%,#0744C8_100%)] p-5 text-white shadow-[0_18px_50px_rgba(0,107,255,0.18)] sm:rounded-[30px] sm:p-6">
+    <div className="min-w-0 rounded-[24px] border border-blue-100 bg-white p-5 text-slate-950 shadow-[0_18px_48px_rgba(0,107,255,0.08)] sm:rounded-[30px] sm:p-6">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-50">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#006BFF]">
             Persona Card
           </p>
-          <h3 className="mt-4 text-2xl font-black tracking-[-0.04em] sm:text-3xl">
+          <h3 className="mt-4 text-2xl font-black tracking-[-0.025em] sm:text-3xl">
             {persona.name}
           </h3>
-          <p className="mt-1 font-bold text-slate-300">
+          <p className="mt-1 font-bold text-slate-600">
             {persona.age}세 · {persona.job}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-white/15 px-3 py-1 text-xs font-black text-[#BFFFEF] ring-1 ring-white/20">
+        <span className="shrink-0 rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-black text-[#006BFF] ring-1 ring-blue-100">
           Core Target
         </span>
       </div>
-      <p className="mt-5 text-sm font-medium leading-7 text-slate-300">
+      <p className="mt-5 text-sm font-semibold leading-7 text-slate-700">
         {persona.lifestyle}
       </p>
       <div className="mt-6 grid gap-3 md:grid-cols-3">
@@ -1158,20 +1158,20 @@ function PersonaList({
   tone: "risk" | "opportunity" | "neutral";
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+    <div className="rounded-2xl border border-blue-100 bg-[#F7FBFF] p-4">
       <p
         className={cn(
           "text-[11px] font-black",
-          tone === "risk" && "text-rose-200",
-          tone === "opportunity" && "text-emerald-200",
-          tone === "neutral" && "text-slate-300",
+          tone === "risk" && "text-rose-700",
+          tone === "opportunity" && "text-[#047857]",
+          tone === "neutral" && "text-slate-600",
         )}
       >
         {title}
       </p>
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
-          <li key={item} className="flex gap-2 text-xs font-medium leading-5 text-slate-300">
+          <li key={item} className="flex gap-2 text-xs font-semibold leading-5 text-slate-700">
             <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#2CE6B5]" />
             {item}
           </li>
@@ -1196,7 +1196,7 @@ function TargetSegmentCard({ segment }: { segment: TargetSegment }) {
           style={{ width: `${segment.fitScore}%` }}
         />
       </div>
-      <p className="mt-3 text-sm leading-6 text-slate-500">{segment.description}</p>
+      <p className="mt-3 text-sm leading-6 text-slate-700">{segment.description}</p>
       <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">{segment.reason}</p>
       <p className="mt-4 rounded-2xl bg-[#EAF3FF] p-3 text-sm font-black leading-6 text-[#0758D8]">
         {segment.recommendedMessage}
@@ -1246,23 +1246,23 @@ function CompetitorTable({ competitors }: { competitors: CompetitorProfile[] }) 
                   competitor
                 </p>
               </td>
-              <td className="px-5 py-5 font-bold text-slate-600">
+              <td className="px-5 py-5 font-bold text-slate-700">
                 {competitor.priceLevel}
               </td>
-              <td className="px-5 py-5 leading-6 text-slate-600">
+              <td className="px-5 py-5 leading-6 text-slate-700">
                 {competitor.usp}
               </td>
-              <td className="px-5 py-5 leading-6 text-slate-600">
+              <td className="px-5 py-5 leading-6 text-slate-700">
                 {competitor.strength}
               </td>
-              <td className="px-5 py-5 leading-6 text-slate-600">
+              <td className="px-5 py-5 leading-6 text-slate-700">
                 {competitor.weakness}
               </td>
               <td className="px-5 py-5">
                 <span className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857]">
                   {competitor.messageTone}
                 </span>
-                <p className="mt-3 max-w-[220px] text-xs font-semibold leading-5 text-slate-500">
+                <p className="mt-3 max-w-[220px] text-xs font-semibold leading-5 text-slate-600">
                   {competitor.channel}
                 </p>
               </td>
@@ -1389,7 +1389,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
             return (
               <h1
                 key={key}
-                className="border-b border-slate-200 pb-4 text-2xl font-black tracking-[-0.05em] text-slate-950 sm:text-3xl"
+                className="border-b border-slate-200 pb-4 text-2xl font-black tracking-[-0.03em] text-slate-950 sm:text-3xl"
               >
                 {renderInlineMarkdown(line.replace("# ", ""))}
               </h1>
@@ -1436,7 +1436,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
           }
 
           return (
-            <p key={key} className="text-sm font-medium leading-7 text-slate-600">
+            <p key={key} className="text-sm font-medium leading-7 text-slate-700">
               {renderInlineMarkdown(line)}
             </p>
           );
