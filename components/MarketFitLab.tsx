@@ -199,8 +199,8 @@ export function MarketFitLab() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-950">
-      <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_18%_0%,rgba(44,230,181,0.18),transparent_32%),radial-gradient(circle_at_86%_12%,rgba(0,107,255,0.14),transparent_30%),linear-gradient(180deg,#F4F8FF_0%,#FFFFFF_46%,#EFF6FF_100%)] text-slate-950">
+      <header className="sticky top-0 z-30 border-b border-blue-100/80 bg-white/88 shadow-sm shadow-blue-950/5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
           <div className="flex min-w-0 items-center gap-3">
             <Image
@@ -208,10 +208,10 @@ export function MarketFitLab() {
               alt="Market Fit Lab icon"
               width={44}
               height={44}
-              className="size-10 shrink-0 rounded-2xl shadow-lg shadow-slate-900/15 sm:size-11"
+              className="size-10 shrink-0 rounded-2xl shadow-lg shadow-blue-700/20 sm:size-11"
             />
             <div className="min-w-0">
-              <p className="text-[11px] font-black uppercase tracking-[0.28em] text-blue-600">
+              <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#006BFF]">
                 Market Fit Lab
               </p>
               <h1 className="truncate text-base font-black tracking-[-0.04em] sm:text-xl">
@@ -221,7 +221,7 @@ export function MarketFitLab() {
           </div>
           <button
             onClick={installApp}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-blue-700 sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#006BFF] px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-[#006BFF]/20 transition hover:-translate-y-0.5 hover:bg-[#0056D6] sm:w-auto"
           >
             <Download size={16} />
             앱 다운로드
@@ -231,12 +231,12 @@ export function MarketFitLab() {
 
       <div className="mx-auto grid w-full max-w-[1480px] gap-4 px-4 py-4 sm:gap-6 sm:px-6 sm:py-6 xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <nav className="sticky top-24 rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_12px_36px_rgba(15,23,42,0.06)]">
-            <div className="mb-3 rounded-3xl bg-slate-950 p-4 text-white">
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-200">
+          <nav className="sticky top-24 rounded-[28px] border border-blue-100 bg-white/94 p-4 shadow-[0_12px_36px_rgba(0,107,255,0.08)] backdrop-blur">
+            <div className="mb-3 rounded-3xl bg-[radial-gradient(circle_at_88%_18%,rgba(44,230,181,0.55),transparent_20%),linear-gradient(135deg,#0086FF_0%,#006BFF_54%,#0647D7_100%)] p-4 text-white shadow-lg shadow-[#006BFF]/20">
+              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-50">
                 Report Index
               </p>
-              <p className="mt-2 text-sm font-bold leading-5 text-slate-300">
+              <p className="mt-2 text-sm font-bold leading-5 text-blue-50/90">
                 핵심 요약부터 실행 계획까지 빠르게 이동합니다.
               </p>
             </div>
@@ -246,9 +246,9 @@ export function MarketFitLab() {
                 <a
                   key={section.id}
                   href={`#${section.id}`}
-                  className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
+                  className="flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-slate-600 transition hover:bg-[#EAF3FF] hover:text-[#006BFF]"
                 >
-                  <span className="grid size-8 place-items-center rounded-xl bg-slate-100 text-slate-500">
+                  <span className="grid size-8 place-items-center rounded-xl bg-[#F0F7FF] text-[#006BFF]">
                     <Icon size={16} />
                   </span>
                   {section.label}
@@ -260,27 +260,27 @@ export function MarketFitLab() {
 
         <main className="min-w-0 space-y-5 sm:space-y-6">
           {installNotice && (
-            <div className="rounded-3xl border border-blue-100 bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-800">
+            <div className="rounded-3xl border border-[#BFE0FF] bg-[#EAF3FF] px-5 py-4 text-sm font-semibold text-[#0758D8]">
               {installNotice}
             </div>
           )}
 
-          <section className="min-w-0 overflow-hidden rounded-[24px] bg-slate-950 text-white shadow-2xl shadow-slate-950/15 sm:rounded-[32px]">
+          <section className="min-w-0 overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_83%_18%,rgba(44,230,181,0.48),transparent_19%),radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.18),transparent_26%),linear-gradient(135deg,#0086FF_0%,#006BFF_48%,#0647D7_100%)] text-white shadow-2xl shadow-[#006BFF]/20 sm:rounded-[32px]">
             <div className="grid min-w-0 gap-6 p-5 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:p-10">
               <div className="flex min-w-0 flex-col justify-between gap-8 sm:gap-10">
                 <div className="min-w-0">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-black text-blue-100">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1.5 text-xs font-black text-white shadow-sm shadow-blue-950/10">
                     <Sparkles size={14} />
                     Mock OpenAI Analysis
                   </span>
                   <h2 className="mt-5 max-w-2xl text-3xl font-black leading-tight tracking-[-0.05em] sm:text-4xl lg:text-5xl">
                     브랜드 정보를 입력하면 전략 보고서까지 자동 정리합니다.
                   </h2>
-                  <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
+                  <p className="mt-4 max-w-2xl text-base leading-7 text-blue-50/92">
                     실제 OpenAI API 대신 전문가 수준의 mock 분석 데이터를 불러오며,
                     추후 API 연결을 위해 service layer를 분리했습니다.
                   </p>
-                  <div className="mt-5 rounded-[22px] border border-blue-300/20 bg-blue-400/10 p-4 text-sm font-bold leading-7 text-blue-50 sm:rounded-[26px] sm:p-5">
+                  <div className="mt-5 rounded-[22px] border border-white/20 bg-white/15 p-4 text-sm font-bold leading-7 text-white shadow-lg shadow-blue-950/10 sm:rounded-[26px] sm:p-5">
                     {productPositioningStatement}
                   </div>
                 </div>
@@ -385,7 +385,7 @@ function ProjectForm({
   ];
 
   return (
-    <div className="min-w-0 rounded-[24px] border border-white/10 bg-white p-4 text-slate-950 shadow-2xl shadow-black/20 sm:rounded-[28px] sm:p-5">
+    <div className="min-w-0 rounded-[24px] border border-white/35 bg-white/95 p-4 text-slate-950 shadow-2xl shadow-[#005BEA]/20 backdrop-blur sm:rounded-[28px] sm:p-5">
       <div className="mb-5 flex items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-black tracking-[-0.04em]">프로젝트 입력</h3>
@@ -393,7 +393,7 @@ function ProjectForm({
             {competitorCount}개 경쟁사 입력됨
           </p>
         </div>
-        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
+        <span className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857]">
           local state
         </span>
       </div>
@@ -413,7 +413,7 @@ function ProjectForm({
                 onChange={(event) =>
                   onChange({ ...input, [field.key]: event.target.value })
                 }
-                className="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold outline-none transition focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                className="w-full resize-none rounded-2xl border border-blue-100 bg-[#F7FBFF] px-3 py-2.5 text-sm font-semibold outline-none transition focus:border-[#2CE6B5] focus:bg-white focus:ring-4 focus:ring-[#CFFAF0]"
               />
             ) : (
               <input
@@ -421,7 +421,7 @@ function ProjectForm({
                 onChange={(event) =>
                   onChange({ ...input, [field.key]: event.target.value })
                 }
-                className="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none transition focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                className="h-11 w-full rounded-2xl border border-blue-100 bg-[#F7FBFF] px-3 text-sm font-semibold outline-none transition focus:border-[#2CE6B5] focus:bg-white focus:ring-4 focus:ring-[#CFFAF0]"
               />
             )}
           </label>
@@ -430,7 +430,7 @@ function ProjectForm({
       <button
         onClick={onSubmit}
         disabled={loading}
-        className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 text-sm font-black text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#0086FF_0%,#006BFF_64%,#2CE6B5_150%)] text-sm font-black text-white shadow-lg shadow-[#006BFF]/25 transition hover:-translate-y-0.5 hover:shadow-[#006BFF]/35 disabled:cursor-not-allowed disabled:opacity-70"
       >
         {loading ? <Loader2 size={17} className="animate-spin" /> : <BarChart3 size={17} />}
         {loading ? "mock 분석 결과 생성 중..." : "분석 시작"}
@@ -441,8 +441,8 @@ function ProjectForm({
 
 function EmptyState({ loading }: { loading: boolean }) {
   return (
-    <section className="rounded-[24px] border border-dashed border-slate-300 bg-white p-5 text-center shadow-sm sm:rounded-[32px] sm:p-10">
-      <div className="mx-auto grid size-16 place-items-center rounded-3xl bg-blue-50 text-blue-700">
+    <section className="rounded-[24px] border border-dashed border-blue-200 bg-white/92 p-5 text-center shadow-sm shadow-blue-950/5 backdrop-blur sm:rounded-[32px] sm:p-10">
+      <div className="mx-auto grid size-16 place-items-center rounded-3xl bg-[#EAF3FF] text-[#006BFF]">
         {loading ? <Loader2 className="animate-spin" /> : <Clipboard />}
       </div>
       <h3 className="mt-5 text-xl font-black tracking-[-0.04em] sm:text-2xl">
@@ -467,8 +467,8 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
       className={cn(
         "min-w-0 rounded-[24px] border p-4 sm:rounded-[28px]",
         isDark
-          ? "border-white/10 bg-white/[0.06]"
-          : "border-slate-200 bg-slate-50",
+          ? "border-white/20 bg-white/[0.12]"
+          : "border-blue-100 bg-[#F7FBFF]",
       )}
     >
       <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
@@ -476,7 +476,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
           <p
             className={cn(
               "text-[10px] font-black uppercase tracking-[0.22em]",
-              isDark ? "text-blue-200" : "text-blue-600",
+              isDark ? "text-white/85" : "text-[#006BFF]",
             )}
           >
             Analysis Flow
@@ -493,7 +493,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
         <span
           className={cn(
             "rounded-full px-3 py-1 text-xs font-black",
-            isDark ? "bg-white/10 text-blue-100" : "bg-blue-50 text-blue-700",
+            isDark ? "bg-white/15 text-white" : "bg-[#DDFBF0] text-[#047857]",
           )}
         >
           8-step workflow
@@ -509,7 +509,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
               className={cn(
                 "min-w-0 rounded-2xl border p-4",
                 isDark
-                  ? "border-white/10 bg-slate-950/35"
+                  ? "border-white/16 bg-white/[0.10]"
                   : "border-slate-200 bg-white",
               )}
             >
@@ -517,7 +517,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
                 <span
                   className={cn(
                     "text-xs font-black",
-                    isDark ? "text-blue-200" : "text-blue-700",
+                    isDark ? "text-[#BFFFEF]" : "text-[#006BFF]",
                   )}
                 >
                   {String(index + 1).padStart(2, "0")}
@@ -526,8 +526,8 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
                   className={cn(
                     "grid size-8 place-items-center rounded-xl",
                     isDark
-                      ? "bg-white/10 text-blue-100"
-                      : "bg-blue-50 text-blue-700",
+                      ? "bg-white/15 text-white"
+                      : "bg-[#EAF3FF] text-[#006BFF]",
                   )}
                 >
                   <Icon size={16} />
@@ -576,8 +576,8 @@ function AnalysisSections({
         featured
       >
         <div className="mb-5 grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <div className="min-w-0 rounded-[24px] bg-gradient-to-br from-slate-950 via-[#172554] to-[#312e81] p-5 text-white shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-blue-200">
+          <div className="min-w-0 rounded-[24px] bg-[radial-gradient(circle_at_90%_18%,rgba(44,230,181,0.55),transparent_20%),linear-gradient(135deg,#0086FF_0%,#006BFF_50%,#0647D7_100%)] p-5 text-white shadow-[0_18px_50px_rgba(0,107,255,0.22)] sm:rounded-[28px] sm:p-6">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-blue-50">
               <Lightbulb size={15} />
               Strategic Conclusion
             </div>
@@ -700,7 +700,7 @@ function AnalysisSections({
           </div>
           <div className="flex items-center gap-4 text-xs font-black text-slate-600">
             <span className="inline-flex items-center gap-2">
-              <span className="size-3 rounded-full bg-blue-600 ring-4 ring-blue-100" />
+              <span className="size-3 rounded-full bg-[#006BFF] ring-4 ring-[#CFFAF0]" />
               우리 브랜드
             </span>
             <span className="inline-flex items-center gap-2">
@@ -709,7 +709,7 @@ function AnalysisSections({
             </span>
           </div>
         </div>
-        <div className="overflow-x-auto rounded-[24px] border border-slate-200 bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:rounded-[28px] sm:p-5">
+        <div className="overflow-x-auto rounded-[24px] border border-blue-100 bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:rounded-[28px] sm:p-5">
           <div className="h-[380px] min-w-[620px] sm:h-[520px] sm:min-w-0">
             <ResponsiveContainer
               width="100%"
@@ -805,13 +805,13 @@ function AnalysisSections({
               key={message.angle}
               className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:rounded-[28px] sm:p-5"
             >
-              <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-black text-violet-700">
+              <span className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857]">
                 {message.angle}
               </span>
               <h3 className="mt-4 text-xl font-black leading-7 tracking-[-0.05em] text-slate-950 sm:text-2xl sm:leading-8">
                 {message.mainCopy}
               </h3>
-              <p className="mt-3 rounded-2xl bg-blue-50 p-3 text-sm font-black leading-6 text-blue-800">
+              <p className="mt-3 rounded-2xl bg-[#EAF3FF] p-3 text-sm font-black leading-6 text-[#0758D8]">
                 {message.subCopy}
               </p>
               <p className="mt-4 text-sm font-medium leading-6 text-slate-500">
@@ -872,7 +872,7 @@ function AnalysisSections({
           <div className="flex flex-col items-start gap-2 sm:items-end">
             <button
               onClick={onCopyReport}
-              className="inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#006BFF] px-4 py-2.5 text-sm font-black text-white shadow-lg shadow-[#006BFF]/20 transition hover:bg-[#0056D6]"
             >
               <Copy size={16} />
               {copied ? "복사 완료" : "Copy Report"}
@@ -880,7 +880,7 @@ function AnalysisSections({
             {copied && (
               <span
                 role="status"
-                className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 ring-1 ring-emerald-100"
+                className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857] ring-1 ring-[#B5F3DF]"
               >
                 Markdown 리포트가 복사되었습니다.
               </span>
@@ -917,13 +917,13 @@ function SectionCard({
       className={cn(
         "min-w-0 rounded-[24px] border bg-white shadow-[0_14px_42px_rgba(15,23,42,0.06)] sm:rounded-[32px]",
         featured
-          ? "border-blue-100 p-5 sm:p-7 lg:p-8"
-          : "border-slate-200 p-5 sm:p-6",
+          ? "border-[#BFE0FF] p-5 shadow-[0_18px_52px_rgba(0,107,255,0.10)] sm:p-7 lg:p-8"
+          : "border-blue-100/80 p-5 shadow-[0_14px_42px_rgba(0,107,255,0.06)] sm:p-6",
       )}
     >
       <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-600">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#006BFF]">
             {eyebrow}
           </p>
           <h2
@@ -949,8 +949,8 @@ function SectionCard({
 
 function MiniConclusion({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/10 p-4">
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-blue-200">
+    <div className="rounded-2xl border border-white/20 bg-white/15 p-4 shadow-sm shadow-blue-950/10">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#BFFFEF]">
         {label}
       </p>
       <p className="mt-2 text-sm font-black leading-5 text-white">{value}</p>
@@ -1065,8 +1065,8 @@ function InsightBox({
     <div
       className={cn(
         "min-w-0 rounded-[22px] border p-4 sm:rounded-[26px] sm:p-5",
-        tone === "primary" && "border-blue-100 bg-blue-50",
-        tone === "opportunity" && "border-emerald-100 bg-emerald-50",
+        tone === "primary" && "border-[#BFE0FF] bg-[#EAF3FF]",
+        tone === "opportunity" && "border-[#B5F3DF] bg-[#EFFFF9]",
         tone === "risk" && "border-rose-100 bg-rose-50",
         tone === "neutral" && "border-slate-200 bg-slate-50",
         className,
@@ -1076,9 +1076,9 @@ function InsightBox({
         {tone === "risk" ? (
           <AlertTriangle size={16} className="text-rose-600" />
         ) : tone === "opportunity" ? (
-          <TrendingUp size={16} className="text-emerald-600" />
+          <TrendingUp size={16} className="text-[#047857]" />
         ) : tone === "primary" ? (
-          <Lightbulb size={16} className="text-blue-600" />
+          <Lightbulb size={16} className="text-[#006BFF]" />
         ) : (
           <CheckCircle2 size={16} className="text-slate-500" />
         )}
@@ -1110,10 +1110,10 @@ function PersonaCard({ analysis }: { analysis: MarketingAnalysis }) {
   const persona = analysis.targetAnalysis.persona;
 
   return (
-    <div className="min-w-0 rounded-[24px] bg-slate-950 p-5 text-white shadow-[0_18px_50px_rgba(15,23,42,0.2)] sm:rounded-[30px] sm:p-6">
+    <div className="min-w-0 rounded-[24px] bg-[radial-gradient(circle_at_88%_14%,rgba(44,230,181,0.45),transparent_20%),linear-gradient(135deg,#007BFF_0%,#006BFF_54%,#0744C8_100%)] p-5 text-white shadow-[0_18px_50px_rgba(0,107,255,0.18)] sm:rounded-[30px] sm:p-6">
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-200">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-50">
             Persona Card
           </p>
           <h3 className="mt-4 text-2xl font-black tracking-[-0.04em] sm:text-3xl">
@@ -1123,7 +1123,7 @@ function PersonaCard({ analysis }: { analysis: MarketingAnalysis }) {
             {persona.age}세 · {persona.job}
           </p>
         </div>
-        <span className="shrink-0 rounded-full bg-blue-500/15 px-3 py-1 text-xs font-black text-blue-200 ring-1 ring-blue-300/20">
+        <span className="shrink-0 rounded-full bg-white/15 px-3 py-1 text-xs font-black text-[#BFFFEF] ring-1 ring-white/20">
           Core Target
         </span>
       </div>
@@ -1172,7 +1172,7 @@ function PersonaList({
       <ul className="mt-3 space-y-2">
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-xs font-medium leading-5 text-slate-300">
-            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-blue-300" />
+            <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#2CE6B5]" />
             {item}
           </li>
         ))}
@@ -1186,19 +1186,19 @@ function TargetSegmentCard({ segment }: { segment: TargetSegment }) {
     <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
       <div className="flex items-center justify-between gap-3">
         <h3 className="font-black leading-5 text-slate-950">{segment.name}</h3>
-        <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-black text-white shadow-sm">
+        <span className="rounded-full bg-[#006BFF] px-3 py-1 text-xs font-black text-white shadow-sm">
           {segment.fitScore}점
         </span>
       </div>
       <div className="mt-4 h-2 rounded-full bg-slate-100">
         <div
-          className="h-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-500"
+          className="h-2 rounded-full bg-[linear-gradient(90deg,#006BFF_0%,#2CE6B5_100%)]"
           style={{ width: `${segment.fitScore}%` }}
         />
       </div>
       <p className="mt-3 text-sm leading-6 text-slate-500">{segment.description}</p>
       <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">{segment.reason}</p>
-      <p className="mt-4 rounded-2xl bg-blue-50 p-3 text-sm font-black leading-6 text-blue-700">
+      <p className="mt-4 rounded-2xl bg-[#EAF3FF] p-3 text-sm font-black leading-6 text-[#0758D8]">
         {segment.recommendedMessage}
       </p>
     </div>
@@ -1207,12 +1207,12 @@ function TargetSegmentCard({ segment }: { segment: TargetSegment }) {
 
 function BulletCard({ index, body }: { index: number; body: string }) {
   return (
-    <div className="min-w-0 rounded-[22px] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4 shadow-[0_10px_28px_rgba(37,99,235,0.06)] sm:rounded-[26px] sm:p-5">
+    <div className="min-w-0 rounded-[22px] border border-[#BFE0FF] bg-gradient-to-br from-[#EAF3FF] to-white p-4 shadow-[0_10px_28px_rgba(0,107,255,0.08)] sm:rounded-[26px] sm:p-5">
       <div className="flex items-center justify-between">
-        <span className="grid size-9 place-items-center rounded-2xl bg-blue-600 text-sm font-black text-white">
+        <span className="grid size-9 place-items-center rounded-2xl bg-[#006BFF] text-sm font-black text-white">
           {String(index).padStart(2, "0")}
         </span>
-        <Flag size={18} className="text-blue-600" />
+        <Flag size={18} className="text-[#006BFF]" />
       </div>
       <p className="mt-4 text-sm font-black leading-6 text-slate-900">{body}</p>
     </div>
@@ -1223,7 +1223,7 @@ function CompetitorTable({ competitors }: { competitors: CompetitorProfile[] }) 
   return (
     <div className="mt-5 min-w-0 overflow-x-auto rounded-[24px] border border-slate-200 bg-white shadow-[0_12px_34px_rgba(15,23,42,0.05)] sm:rounded-[28px]">
       <table className="w-full min-w-[1280px] border-collapse text-left text-sm">
-        <thead className="bg-slate-950 text-white">
+        <thead className="bg-[linear-gradient(135deg,#0086FF_0%,#006BFF_58%,#0647D7_100%)] text-white">
           <tr>
             <th className="px-5 py-5 text-xs uppercase tracking-[0.16em]">브랜드</th>
             <th className="px-5 py-5 text-xs uppercase tracking-[0.16em]">가격</th>
@@ -1259,7 +1259,7 @@ function CompetitorTable({ competitors }: { competitors: CompetitorProfile[] }) 
                 {competitor.weakness}
               </td>
               <td className="px-5 py-5">
-                <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-black text-violet-700">
+                <span className="rounded-full bg-[#DDFBF0] px-3 py-1 text-xs font-black text-[#047857]">
                   {competitor.messageTone}
                 </span>
                 <p className="mt-3 max-w-[220px] text-xs font-semibold leading-5 text-slate-500">
@@ -1337,7 +1337,7 @@ function PositioningDot(props: unknown) {
           cx={cx}
           cy={cy}
           r={18}
-          fill="#2563eb"
+          fill="#2CE6B5"
           opacity={0.16}
         />
       )}
@@ -1345,7 +1345,7 @@ function PositioningDot(props: unknown) {
         cx={cx}
         cy={cy}
         r={isOurs ? 11 : 8}
-        fill={isOurs ? "#2563eb" : "#94a3b8"}
+        fill={isOurs ? "#006BFF" : "#94a3b8"}
         stroke="#ffffff"
         strokeWidth={3}
       />
@@ -1375,7 +1375,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
   const lines = markdown.split("\n");
 
   return (
-    <article className="max-h-[680px] min-w-0 overflow-auto rounded-[24px] border border-slate-200 bg-white p-4 shadow-inner sm:rounded-[28px] sm:p-6">
+    <article className="max-h-[680px] min-w-0 overflow-auto rounded-[24px] border border-blue-100 bg-white p-4 shadow-inner sm:rounded-[28px] sm:p-6">
       <div className="mx-auto max-w-4xl space-y-3">
         {lines.map((rawLine, index) => {
           const line = rawLine.trim();
@@ -1400,7 +1400,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
             return (
               <h2
                 key={key}
-                className="pt-5 text-xl font-black tracking-[-0.03em] text-blue-800"
+                className="pt-5 text-xl font-black tracking-[-0.03em] text-[#006BFF]"
               >
                 {renderInlineMarkdown(line.replace("## ", ""))}
               </h2>
@@ -1421,7 +1421,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
           if (line.startsWith("- ")) {
             return (
               <p key={key} className="flex min-w-0 gap-3 text-sm font-semibold leading-7 text-slate-700">
-                <span className="mt-3 size-1.5 shrink-0 rounded-full bg-blue-600" />
+                <span className="mt-3 size-1.5 shrink-0 rounded-full bg-[#2CE6B5]" />
                 <span>{renderInlineMarkdown(line.replace("- ", ""))}</span>
               </p>
             );
@@ -1429,7 +1429,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
 
           if (/^\d+\.\s/.test(line)) {
             return (
-              <p key={key} className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold leading-7 text-slate-700">
+              <p key={key} className="rounded-2xl bg-[#F7FBFF] px-4 py-3 text-sm font-semibold leading-7 text-slate-700">
                 {renderInlineMarkdown(line)}
               </p>
             );
