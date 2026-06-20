@@ -201,27 +201,27 @@ export function MarketFitLab() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-950">
       <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1480px] items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-[1480px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+          <div className="flex min-w-0 items-center gap-3">
             <Image
               src="/icons/mfl-icon-192.png"
               alt="Market Fit Lab icon"
               width={44}
               height={44}
-              className="size-11 rounded-2xl shadow-lg shadow-slate-900/15"
+              className="size-10 shrink-0 rounded-2xl shadow-lg shadow-slate-900/15 sm:size-11"
             />
-            <div>
+            <div className="min-w-0">
               <p className="text-[11px] font-black uppercase tracking-[0.28em] text-blue-600">
                 Market Fit Lab
               </p>
-              <h1 className="text-xl font-black tracking-[-0.04em]">
+              <h1 className="truncate text-base font-black tracking-[-0.04em] sm:text-xl">
                 Strategy Report Dashboard
               </h1>
             </div>
           </div>
           <button
             onClick={installApp}
-            className="inline-flex items-center gap-2 rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-blue-700"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-blue-700 sm:w-auto"
           >
             <Download size={16} />
             앱 다운로드
@@ -229,7 +229,7 @@ export function MarketFitLab() {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-[1480px] gap-6 px-6 py-6 xl:grid-cols-[280px_1fr]">
+      <div className="mx-auto grid w-full max-w-[1480px] gap-4 px-4 py-4 sm:gap-6 sm:px-6 sm:py-6 xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
           <nav className="sticky top-24 rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_12px_36px_rgba(15,23,42,0.06)]">
             <div className="mb-3 rounded-3xl bg-slate-950 p-4 text-white">
@@ -258,29 +258,29 @@ export function MarketFitLab() {
           </nav>
         </aside>
 
-        <main className="space-y-6">
+        <main className="min-w-0 space-y-5 sm:space-y-6">
           {installNotice && (
             <div className="rounded-3xl border border-blue-100 bg-blue-50 px-5 py-4 text-sm font-semibold text-blue-800">
               {installNotice}
             </div>
           )}
 
-          <section className="overflow-hidden rounded-[32px] bg-slate-950 text-white shadow-2xl shadow-slate-950/15">
-            <div className="grid gap-8 p-7 lg:grid-cols-[1.05fr_0.95fr] lg:p-10">
-              <div className="flex flex-col justify-between gap-10">
-                <div>
+          <section className="min-w-0 overflow-hidden rounded-[24px] bg-slate-950 text-white shadow-2xl shadow-slate-950/15 sm:rounded-[32px]">
+            <div className="grid min-w-0 gap-6 p-5 sm:gap-8 sm:p-7 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:p-10">
+              <div className="flex min-w-0 flex-col justify-between gap-8 sm:gap-10">
+                <div className="min-w-0">
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-black text-blue-100">
                     <Sparkles size={14} />
                     Mock OpenAI Analysis
                   </span>
-                  <h2 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-[-0.06em] lg:text-5xl">
+                  <h2 className="mt-5 max-w-2xl text-3xl font-black leading-tight tracking-[-0.05em] sm:text-4xl lg:text-5xl">
                     브랜드 정보를 입력하면 전략 보고서까지 자동 정리합니다.
                   </h2>
                   <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
                     실제 OpenAI API 대신 전문가 수준의 mock 분석 데이터를 불러오며,
                     추후 API 연결을 위해 service layer를 분리했습니다.
                   </p>
-                  <div className="mt-5 rounded-[26px] border border-blue-300/20 bg-blue-400/10 p-5 text-sm font-bold leading-7 text-blue-50">
+                  <div className="mt-5 rounded-[22px] border border-blue-300/20 bg-blue-400/10 p-4 text-sm font-bold leading-7 text-blue-50 sm:rounded-[26px] sm:p-5">
                     {productPositioningStatement}
                   </div>
                 </div>
@@ -385,7 +385,7 @@ function ProjectForm({
   ];
 
   return (
-    <div className="rounded-[28px] border border-white/10 bg-white p-5 text-slate-950 shadow-2xl shadow-black/20">
+    <div className="min-w-0 rounded-[24px] border border-white/10 bg-white p-4 text-slate-950 shadow-2xl shadow-black/20 sm:rounded-[28px] sm:p-5">
       <div className="mb-5 flex items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-black tracking-[-0.04em]">프로젝트 입력</h3>
@@ -441,11 +441,11 @@ function ProjectForm({
 
 function EmptyState({ loading }: { loading: boolean }) {
   return (
-    <section className="rounded-[32px] border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+    <section className="rounded-[24px] border border-dashed border-slate-300 bg-white p-5 text-center shadow-sm sm:rounded-[32px] sm:p-10">
       <div className="mx-auto grid size-16 place-items-center rounded-3xl bg-blue-50 text-blue-700">
         {loading ? <Loader2 className="animate-spin" /> : <Clipboard />}
       </div>
-      <h3 className="mt-5 text-2xl font-black tracking-[-0.04em]">
+      <h3 className="mt-5 text-xl font-black tracking-[-0.04em] sm:text-2xl">
         분석 시작 버튼을 누르면 대시보드가 생성됩니다.
       </h3>
       <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-slate-500">
@@ -465,7 +465,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
   return (
     <div
       className={cn(
-        "rounded-[28px] border p-4",
+        "min-w-0 rounded-[24px] border p-4 sm:rounded-[28px]",
         isDark
           ? "border-white/10 bg-white/[0.06]"
           : "border-slate-200 bg-slate-50",
@@ -483,7 +483,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
           </p>
           <h3
             className={cn(
-              "mt-1 text-lg font-black tracking-[-0.04em]",
+              "mt-1 text-base font-black tracking-[-0.04em] sm:text-lg",
               isDark ? "text-white" : "text-slate-950",
             )}
           >
@@ -499,7 +499,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
           8-step workflow
         </span>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-4 grid min-w-0 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         {workflowSteps.map((step, index) => {
           const Icon = step.icon;
 
@@ -507,7 +507,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
             <div
               key={step.title}
               className={cn(
-                "rounded-2xl border p-4",
+                "min-w-0 rounded-2xl border p-4",
                 isDark
                   ? "border-white/10 bg-slate-950/35"
                   : "border-slate-200 bg-white",
@@ -535,7 +535,7 @@ function AnalysisWorkflow({ variant }: { variant: "dark" | "light" }) {
               </div>
               <strong
                 className={cn(
-                  "mt-3 block text-sm font-black leading-5",
+                  "mt-3 block break-keep text-sm font-black leading-5",
                   isDark ? "text-white" : "text-slate-950",
                 )}
               >
@@ -567,7 +567,7 @@ function AnalysisSections({
   onCopyReport: () => void;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-5 sm:space-y-6">
       <SectionCard
         id="summary"
         eyebrow="Executive Summary"
@@ -575,13 +575,13 @@ function AnalysisSections({
         description={sectionDescriptions.summary}
         featured
       >
-        <div className="mb-5 grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-[28px] bg-gradient-to-br from-slate-950 via-[#172554] to-[#312e81] p-6 text-white shadow-[0_18px_50px_rgba(15,23,42,0.22)]">
+        <div className="mb-5 grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <div className="min-w-0 rounded-[24px] bg-gradient-to-br from-slate-950 via-[#172554] to-[#312e81] p-5 text-white shadow-[0_18px_50px_rgba(15,23,42,0.22)] sm:rounded-[28px] sm:p-6">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.22em] text-blue-200">
               <Lightbulb size={15} />
               Strategic Conclusion
             </div>
-            <p className="mt-5 text-2xl font-black leading-9 tracking-[-0.04em] lg:text-3xl lg:leading-10">
+            <p className="mt-5 text-xl font-black leading-8 tracking-[-0.04em] sm:text-2xl sm:leading-9 lg:text-3xl lg:leading-10">
               {analysis.executiveSummary.oneLineInsight}
             </p>
             <div className="mt-6 grid gap-3 md:grid-cols-3">
@@ -612,7 +612,7 @@ function AnalysisSections({
             />
           </div>
         </div>
-        <div className="grid gap-4 lg:grid-cols-4">
+        <div className="grid min-w-0 gap-4 lg:grid-cols-2 2xl:grid-cols-4">
           {scoreOrder.map((key) => (
             <ScoreCard
               key={key}
@@ -635,7 +635,7 @@ function AnalysisSections({
         title="제품과 가장 적합한 고객군을 분석합니다."
         description={sectionDescriptions.target}
       >
-        <div className="grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
+        <div className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
           <PersonaCard analysis={analysis} />
           <div className="grid gap-4">
             <InsightBox
@@ -655,7 +655,7 @@ function AnalysisSections({
             />
           </div>
         </div>
-        <div className="mt-6 grid gap-4 xl:grid-cols-4">
+        <div className="mt-6 grid min-w-0 gap-4 md:grid-cols-2 2xl:grid-cols-4">
           {analysis.targetAnalysis.targetSegments.map((segment) => (
             <TargetSegmentCard key={segment.name} segment={segment} />
           ))}
@@ -668,7 +668,7 @@ function AnalysisSections({
         title="경쟁사별 위협도와 기회 영역을 비교합니다."
         description={sectionDescriptions.competitor}
       >
-        <div className="grid gap-4 lg:grid-cols-[0.75fr_1.25fr]">
+        <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
           <InsightBox
             title="경쟁 구도 요약"
             body={analysis.competitorAnalysis.summary}
@@ -709,40 +709,45 @@ function AnalysisSections({
             </span>
           </div>
         </div>
-        <div className="h-[520px] min-h-[520px] rounded-[28px] border border-slate-200 bg-white p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
-          <ResponsiveContainer
-            width="100%"
-            height="100%"
-            minWidth={320}
-            minHeight={320}
-            initialDimension={{ width: 920, height: 480 }}
-          >
-            <ScatterChart margin={{ top: 20, right: 30, bottom: 35, left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-              <XAxis
-                type="number"
-                dataKey="x"
-                domain={[0, 100]}
-                name={analysis.positioning.xAxis}
-                tick={{ fill: "#64748b", fontSize: 12 }}
-                label={{ value: analysis.positioning.xAxis, position: "insideBottom", offset: -20 }}
-              />
-              <YAxis
-                type="number"
-                dataKey="y"
-                domain={[0, 100]}
-                name={analysis.positioning.yAxis}
-                tick={{ fill: "#64748b", fontSize: 12 }}
-                label={{ value: analysis.positioning.yAxis, angle: -90, position: "insideLeft" }}
-              />
-              <ZAxis range={[140, 190]} />
-              <Tooltip content={<PositioningTooltip />} />
-              <Scatter data={analysis.positioning.mapData} shape={<PositioningDot />}>
-                <LabelList dataKey="name" position="top" style={{ fontWeight: 800, fontSize: 12 }} />
-              </Scatter>
-            </ScatterChart>
-          </ResponsiveContainer>
+        <div className="overflow-x-auto rounded-[24px] border border-slate-200 bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:rounded-[28px] sm:p-5">
+          <div className="h-[380px] min-w-[620px] sm:h-[520px] sm:min-w-0">
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+              minWidth={320}
+              minHeight={320}
+              initialDimension={{ width: 620, height: 380 }}
+            >
+              <ScatterChart margin={{ top: 20, right: 30, bottom: 35, left: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis
+                  type="number"
+                  dataKey="x"
+                  domain={[0, 100]}
+                  name={analysis.positioning.xAxis}
+                  tick={{ fill: "#64748b", fontSize: 12 }}
+                  label={{ value: analysis.positioning.xAxis, position: "insideBottom", offset: -20 }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="y"
+                  domain={[0, 100]}
+                  name={analysis.positioning.yAxis}
+                  tick={{ fill: "#64748b", fontSize: 12 }}
+                  label={{ value: analysis.positioning.yAxis, angle: -90, position: "insideLeft" }}
+                />
+                <ZAxis range={[140, 190]} />
+                <Tooltip content={<PositioningTooltip />} />
+                <Scatter data={analysis.positioning.mapData} shape={<PositioningDot />}>
+                  <LabelList dataKey="name" position="top" style={{ fontWeight: 800, fontSize: 12 }} />
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
         </div>
+        <p className="mt-2 text-xs font-bold text-slate-400 sm:hidden">
+          포지셔닝맵은 좌우로 스크롤해 전체 좌표를 확인할 수 있습니다.
+        </p>
         <InsightBox
           title="포지셔닝 해석"
           body={analysis.positioning.interpretation}
@@ -763,12 +768,12 @@ function AnalysisSections({
           tone="primary"
           className="mb-5"
         />
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+        <div className="grid min-w-0 gap-4 md:grid-cols-2 2xl:grid-cols-4">
           {analysis.uspStrategy.uspList.map((usp, index) => (
             <BulletCard key={usp} index={index + 1} body={usp} />
           ))}
         </div>
-        <div className="mt-5 grid gap-4 lg:grid-cols-2">
+        <div className="mt-5 grid min-w-0 gap-4 lg:grid-cols-2">
           <InsightBox
             title="차별화 포인트"
             body={analysis.uspStrategy.differentiationPoint}
@@ -794,16 +799,16 @@ function AnalysisSections({
           tone="neutral"
           className="mb-5"
         />
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+        <div className="grid min-w-0 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
           {analysis.messageStrategy.messages.map((message) => (
             <div
               key={message.angle}
-              className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_12px_32px_rgba(15,23,42,0.05)]"
+              className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_12px_32px_rgba(15,23,42,0.05)] sm:rounded-[28px] sm:p-5"
             >
               <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-black text-violet-700">
                 {message.angle}
               </span>
-              <h3 className="mt-4 text-2xl font-black leading-8 tracking-[-0.05em] text-slate-950">
+              <h3 className="mt-4 text-xl font-black leading-7 tracking-[-0.05em] text-slate-950 sm:text-2xl sm:leading-8">
                 {message.mainCopy}
               </h3>
               <p className="mt-3 rounded-2xl bg-blue-50 p-3 text-sm font-black leading-6 text-blue-800">
@@ -833,7 +838,7 @@ function AnalysisSections({
           {analysis.actionPlan.priorities.map((priority) => (
             <div
               key={priority.action}
-              className="grid gap-4 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] lg:grid-cols-[120px_1fr_0.85fr]"
+              className="grid min-w-0 gap-4 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5 lg:grid-cols-[120px_minmax(0,1fr)_minmax(0,0.85fr)]"
             >
               <PriorityBadge priority={priority.priority} />
               <div>
@@ -910,19 +915,23 @@ function SectionCard({
     <section
       id={id}
       className={cn(
-        "rounded-[32px] border bg-white shadow-[0_14px_42px_rgba(15,23,42,0.06)]",
-        featured ? "border-blue-100 p-7 lg:p-8" : "border-slate-200 p-6",
+        "min-w-0 rounded-[24px] border bg-white shadow-[0_14px_42px_rgba(15,23,42,0.06)] sm:rounded-[32px]",
+        featured
+          ? "border-blue-100 p-5 sm:p-7 lg:p-8"
+          : "border-slate-200 p-5 sm:p-6",
       )}
     >
       <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-600">
             {eyebrow}
           </p>
           <h2
             className={cn(
               "mt-2 font-black tracking-[-0.04em] text-slate-950",
-              featured ? "text-3xl lg:text-4xl" : "text-2xl",
+              featured
+                ? "text-2xl sm:text-3xl lg:text-4xl"
+                : "text-xl sm:text-2xl",
             )}
           >
             {title}
@@ -966,9 +975,9 @@ function ScoreCard({
   );
 
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
-      <div className="flex items-start justify-between">
-        <div>
+    <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.05)] sm:rounded-[28px] sm:p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <span className="text-sm font-black text-slate-900">
             {definition.label}
           </span>
@@ -976,12 +985,12 @@ function ScoreCard({
             {definition.description}
           </p>
         </div>
-        <span className={cn("shrink-0 rounded-full px-2.5 py-1 text-xs font-black", theme.badge)}>
+        <span className={cn("w-fit shrink-0 rounded-full px-2.5 py-1 text-xs font-black", theme.badge)}>
           {getScoreLabel(score)}
         </span>
       </div>
       <div className="mt-4 flex items-end justify-between gap-3">
-        <strong className="block text-5xl font-black tracking-[-0.07em] text-slate-950">
+        <strong className="block text-4xl font-black tracking-[-0.07em] text-slate-950 sm:text-5xl">
           {score}
         </strong>
         <span className={cn("mb-1 rounded-2xl px-3 py-1 text-[11px] font-black ring-1", theme.soft, theme.text, theme.ring)}>
@@ -1003,9 +1012,9 @@ function ScoreCard({
         {metric.reason}
       </p>
       <details className="group mt-3 rounded-2xl border border-slate-200 bg-white p-3">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs font-black text-slate-700 [&::-webkit-details-marker]:hidden">
+        <summary className="flex cursor-pointer list-none flex-col gap-2 text-xs font-black text-slate-700 sm:flex-row sm:items-center sm:justify-between [&::-webkit-details-marker]:hidden">
           <span>산출 기준 보기</span>
-          <span className={cn("rounded-full px-2 py-1", theme.soft, theme.text)}>
+          <span className={cn("w-fit rounded-full px-2 py-1", theme.soft, theme.text)}>
             총 {totalMaxScore}점
           </span>
         </summary>
@@ -1055,7 +1064,7 @@ function InsightBox({
   return (
     <div
       className={cn(
-        "rounded-[26px] border p-5",
+        "min-w-0 rounded-[22px] border p-4 sm:rounded-[26px] sm:p-5",
         tone === "primary" && "border-blue-100 bg-blue-50",
         tone === "opportunity" && "border-emerald-100 bg-emerald-50",
         tone === "risk" && "border-rose-100 bg-rose-50",
@@ -1101,20 +1110,20 @@ function PersonaCard({ analysis }: { analysis: MarketingAnalysis }) {
   const persona = analysis.targetAnalysis.persona;
 
   return (
-    <div className="rounded-[30px] bg-slate-950 p-6 text-white shadow-[0_18px_50px_rgba(15,23,42,0.2)]">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+    <div className="min-w-0 rounded-[24px] bg-slate-950 p-5 text-white shadow-[0_18px_50px_rgba(15,23,42,0.2)] sm:rounded-[30px] sm:p-6">
+      <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
+        <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-200">
             Persona Card
           </p>
-          <h3 className="mt-4 text-3xl font-black tracking-[-0.04em]">
+          <h3 className="mt-4 text-2xl font-black tracking-[-0.04em] sm:text-3xl">
             {persona.name}
           </h3>
           <p className="mt-1 font-bold text-slate-300">
             {persona.age}세 · {persona.job}
           </p>
         </div>
-        <span className="rounded-full bg-blue-500/15 px-3 py-1 text-xs font-black text-blue-200 ring-1 ring-blue-300/20">
+        <span className="shrink-0 rounded-full bg-blue-500/15 px-3 py-1 text-xs font-black text-blue-200 ring-1 ring-blue-300/20">
           Core Target
         </span>
       </div>
@@ -1174,7 +1183,7 @@ function PersonaList({
 
 function TargetSegmentCard({ segment }: { segment: TargetSegment }) {
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+    <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
       <div className="flex items-center justify-between gap-3">
         <h3 className="font-black leading-5 text-slate-950">{segment.name}</h3>
         <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-black text-white shadow-sm">
@@ -1198,7 +1207,7 @@ function TargetSegmentCard({ segment }: { segment: TargetSegment }) {
 
 function BulletCard({ index, body }: { index: number; body: string }) {
   return (
-    <div className="rounded-[26px] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-5 shadow-[0_10px_28px_rgba(37,99,235,0.06)]">
+    <div className="min-w-0 rounded-[22px] border border-blue-100 bg-gradient-to-br from-blue-50 to-white p-4 shadow-[0_10px_28px_rgba(37,99,235,0.06)] sm:rounded-[26px] sm:p-5">
       <div className="flex items-center justify-between">
         <span className="grid size-9 place-items-center rounded-2xl bg-blue-600 text-sm font-black text-white">
           {String(index).padStart(2, "0")}
@@ -1212,7 +1221,7 @@ function BulletCard({ index, body }: { index: number; body: string }) {
 
 function CompetitorTable({ competitors }: { competitors: CompetitorProfile[] }) {
   return (
-    <div className="mt-5 overflow-x-auto rounded-[28px] border border-slate-200 bg-white shadow-[0_12px_34px_rgba(15,23,42,0.05)]">
+    <div className="mt-5 min-w-0 overflow-x-auto rounded-[24px] border border-slate-200 bg-white shadow-[0_12px_34px_rgba(15,23,42,0.05)] sm:rounded-[28px]">
       <table className="w-full min-w-[1280px] border-collapse text-left text-sm">
         <thead className="bg-slate-950 text-white">
           <tr>
@@ -1264,6 +1273,9 @@ function CompetitorTable({ competitors }: { competitors: CompetitorProfile[] }) 
           ))}
         </tbody>
       </table>
+      <p className="border-t border-slate-100 bg-slate-50 px-4 py-3 text-xs font-bold text-slate-400 sm:hidden">
+        경쟁사 비교표는 좌우로 스크롤해 전체 항목을 확인할 수 있습니다.
+      </p>
     </div>
   );
 }
@@ -1345,7 +1357,7 @@ function PriorityBadge({ priority }: { priority: "High" | "Medium" | "Low" }) {
   return (
     <div
       className={cn(
-        "flex h-full min-h-20 flex-col items-center justify-center rounded-2xl px-3 text-center",
+        "flex h-full min-h-16 flex-col items-center justify-center rounded-2xl px-3 py-3 text-center sm:min-h-20 sm:py-0",
         priority === "High" && "bg-rose-50 text-rose-700 ring-1 ring-rose-100",
         priority === "Medium" && "bg-amber-50 text-amber-700 ring-1 ring-amber-100",
         priority === "Low" && "bg-slate-100 text-slate-600 ring-1 ring-slate-200",
@@ -1363,7 +1375,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
   const lines = markdown.split("\n");
 
   return (
-    <article className="max-h-[680px] overflow-auto rounded-[28px] border border-slate-200 bg-white p-6 shadow-inner">
+    <article className="max-h-[680px] min-w-0 overflow-auto rounded-[24px] border border-slate-200 bg-white p-4 shadow-inner sm:rounded-[28px] sm:p-6">
       <div className="mx-auto max-w-4xl space-y-3">
         {lines.map((rawLine, index) => {
           const line = rawLine.trim();
@@ -1377,7 +1389,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
             return (
               <h1
                 key={key}
-                className="border-b border-slate-200 pb-4 text-3xl font-black tracking-[-0.05em] text-slate-950"
+                className="border-b border-slate-200 pb-4 text-2xl font-black tracking-[-0.05em] text-slate-950 sm:text-3xl"
               >
                 {renderInlineMarkdown(line.replace("# ", ""))}
               </h1>
@@ -1408,7 +1420,7 @@ function MarkdownReport({ markdown }: { markdown: string }) {
 
           if (line.startsWith("- ")) {
             return (
-              <p key={key} className="flex gap-3 text-sm font-semibold leading-7 text-slate-700">
+              <p key={key} className="flex min-w-0 gap-3 text-sm font-semibold leading-7 text-slate-700">
                 <span className="mt-3 size-1.5 shrink-0 rounded-full bg-blue-600" />
                 <span>{renderInlineMarkdown(line.replace("- ", ""))}</span>
               </p>
