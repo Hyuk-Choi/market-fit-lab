@@ -36,6 +36,15 @@ export type EvidenceCheck = {
   implication: string;
 };
 
+export type SourceEvidence = {
+  sourceName: string;
+  sourceType: "Official" | "Retail" | "Market" | "Internal";
+  confidence: ConfidenceLevel;
+  verifiedFact: string;
+  implication: string;
+  url?: string;
+};
+
 export type ValidationTask = {
   priority: "High" | "Medium" | "Low";
   task: string;
@@ -106,8 +115,10 @@ export type MarketingAnalysis = {
     verdict: string;
     summary: string;
     evidenceChecks: EvidenceCheck[];
+    sourceEvidence: SourceEvidence[];
     strengths: string[];
     limitations: string[];
+    accuracySafeguards: string[];
     validationTasks: ValidationTask[];
   };
   selectionRecommendations: {

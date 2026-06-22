@@ -61,11 +61,11 @@ export const mockOpenAIAnalysis: MarketingAnalysis = {
     },
   },
   reliabilityReview: {
-    overallScore: 78,
+    overallScore: 76,
     verdict:
-      "현재 분석은 마케팅 기획서 초안과 캠페인 가설 수립에는 충분한 신뢰도를 가지나, 실제 예산 배분 의사결정 전에는 검색량, 가격, 리뷰, 광고 성과 데이터로 추가 검증할 필요가 있음.",
+      "현재 분석은 전략 기획서 초안과 캠페인 가설 수립에는 활용 가능한 신뢰도를 가지나, 실제 예산 배분 의사결정에는 아직 충분하지 않음. 정성적 전략 논리는 강하지만 검색량, 가격, 리뷰, 광고 성과 같은 정량 데이터 검증이 추가되어야 정확도가 높아짐.",
     summary:
-      "오딧세이 블랙 분석은 타겟 문제, 구매 동기, 경쟁 포지션, 메시지 전략이 서로 일관되게 연결되어 있어 전략 프레임워크의 완성도는 높은 편으로 판단됨. 다만 현재 버전은 mock analysis service 기반이므로 외부 시장 데이터와 실매체 성과 데이터가 직접 반영된 결과는 아님.",
+      "오딧세이 블랙 분석은 타겟 문제, 구매 동기, 경쟁 포지션, 메시지 전략이 서로 일관되게 연결되어 있어 전략 프레임워크의 완성도는 높은 편으로 판단됨. 다만 현재 버전은 mock analysis service 기반이므로 실시간 시장 데이터와 실매체 성과 데이터가 직접 계산에 반영된 결과는 아님. 따라서 결과는 ‘검증된 결론’이 아니라 ‘근거가 구조화된 전략 가설’로 사용하는 것이 적합함.",
     evidenceChecks: [
       {
         label: "입력 데이터 완성도",
@@ -105,10 +105,10 @@ export const mockOpenAIAnalysis: MarketingAnalysis = {
       },
       {
         label: "외부 데이터 검증 수준",
-        score: 56,
+        score: 58,
         confidence: "Low",
         finding:
-          "현재 분석은 실시간 검색량, 광고 CPC, 리뷰 감성, 커머스 가격, 실제 판매 성과 데이터를 직접 조회하지 않음.",
+          "일부 공식·리테일 근거로 경쟁사와 제품 맥락은 보강했으나, 실시간 검색량, 광고 CPC, 리뷰 감성, 커머스 가격, 실제 판매 성과 데이터는 아직 자동 조회하지 않음.",
         implication:
           "투자 규모를 결정하기 전에는 네이버 키워드 데이터, 쇼핑 가격, 리뷰 VOC, 광고 A/B 테스트로 보완 검증해야 함.",
       },
@@ -122,17 +122,98 @@ export const mockOpenAIAnalysis: MarketingAnalysis = {
           "단기 테스트 설계가 가능하며, 2~4주 단위로 가설 검증과 예산 재배분을 진행하는 전략이 적합함.",
       },
     ],
+    sourceEvidence: [
+      {
+        sourceName: "Amorepacific ODYSSEY Brand",
+        sourceType: "Official",
+        confidence: "High",
+        verifiedFact:
+          "오딧세이가 1996년 론칭한 남성 스킨케어 브랜드이며, 프리미엄 남성 스킨케어와 향 기반 남성성을 브랜드 정체성으로 제시하는 점이 확인됨.",
+        implication:
+          "오딧세이 블랙을 ‘프리미엄 남성 스킨케어’와 ‘남성적 무드’ 축에서 해석하는 것은 브랜드 맥락상 타당함.",
+        url: "https://www.apgroup.com/int/en/brands/odyssey.html",
+      },
+      {
+        sourceName: "Amoremall ODYSSEY Black",
+        sourceType: "Retail",
+        confidence: "High",
+        verifiedFact:
+          "오딧세이 블랙 스페셜 2종 세트와 블랙 스킨 리파이너, 블랙 에멀전이 공식 브랜드몰에서 판매·노출되는 점이 확인됨.",
+        implication:
+          "2종 루틴과 세트 구매 맥락을 USP와 선물 수요로 해석하는 근거로 활용 가능함. 단, 가격·리뷰 수는 변동 가능하므로 집행 전 재확인이 필요함.",
+        url: "https://brand.amoremall.com/kr/ko/odyssey?menuNo=689",
+      },
+      {
+        sourceName: "Biotherm Homme Official",
+        sourceType: "Official",
+        confidence: "High",
+        verifiedFact:
+          "비오템은 남성 스킨케어 카테고리에서 수분, 진정, 루틴, 안티에이징 제품군을 명확히 운영하는 점이 확인됨.",
+        implication:
+          "비오템 옴므를 프리미엄·수분·안티에이징 비교군으로 선정하는 것은 경쟁사 분석상 타당함.",
+        url: "https://www.biotherm.com/c/mens/",
+      },
+      {
+        sourceName: "Lab Series Official / Olive Young",
+        sourceType: "Official",
+        confidence: "High",
+        verifiedFact:
+          "랩시리즈는 남성 피부 특화 스킨케어와 안티에이징, 올인원, 데일리 레스큐 등 기능성 라인을 전면에 제시함.",
+        implication:
+          "랩시리즈를 남성 전문 기능성 경쟁사로 두고 오딧세이 블랙의 기능성·루틴 진입 장벽을 비교하는 접근이 적합함.",
+        url: "https://www.labseries.com/",
+      },
+      {
+        sourceName: "UL·OS Official / Olive Young",
+        sourceType: "Retail",
+        confidence: "High",
+        verifiedFact:
+          "우르오스는 남성 피부를 위한 스킨케어 솔루션과 올인원 스킨로션 중심 제품 노출이 확인됨.",
+        implication:
+          "우르오스를 간편성·대중성 비교군으로 설정하고, 오딧세이 블랙은 ‘간편하지만 더 프리미엄한 루틴’으로 차별화하는 전략이 타당함.",
+        url: "https://www.ulos.co.kr/",
+      },
+      {
+        sourceName: "Amoremall IOPE",
+        sourceType: "Retail",
+        confidence: "Medium",
+        verifiedFact:
+          "아이오페 맨 프로 레티놀 올인원 등 남성 기능성 제품 노출이 확인됨.",
+        implication:
+          "아이오페 맨은 국내 기능성·가격 비교군으로 활용 가능하나, 오딧세이 블랙과의 직접 경쟁 강도는 채널별 검색·판매 데이터로 보정해야 함.",
+        url: "https://brand.amoremall.com/kr/ko/iope",
+      },
+      {
+        sourceName: "Men's Beauty Market Reports / Industry News",
+        sourceType: "Market",
+        confidence: "Medium",
+        verifiedFact:
+          "국내 남성 화장품 시장의 지속 성장과 ‘깔끔한 인상’, 자기관리 니즈 확대가 업계 기사와 시장 리포트에서 반복적으로 언급됨.",
+        implication:
+          "30대 남성 자기관리 관심층을 타겟으로 설정하는 방향은 시장 흐름과 부합하나, 세부 연령별 전환율은 브랜드별 실데이터로 검증해야 함.",
+        url: "https://www.womentimes.co.kr/news/articleView.html?idxno=85185",
+      },
+    ],
     strengths: [
       "타겟, 경쟁사, USP, 메시지, 실행 전략이 하나의 전략 흐름으로 연결되어 있음.",
       "점수 산출 기준이 항목별로 분리되어 있어 결과 해석과 의사결정 근거를 설명하기 쉬움.",
       "35~39세 핵심 전환 타겟과 30~34세 입문 타겟을 구분해 캠페인 우선순위를 설정할 수 있음.",
       "경쟁사를 프리미엄, 기능성, 대중성 관점으로 나누어 오딧세이 블랙의 포지션 공백을 찾을 수 있음.",
+      "공식 브랜드몰과 주요 리테일 페이지에서 제품·경쟁사 역할을 일부 교차 확인해 정성 분석의 사실 기반을 보강함.",
     ],
     limitations: [
       "현재 버전은 mock 데이터 기반이므로 실시간 시장 데이터나 실제 소비자 조사 결과가 반영되지 않음.",
       "경쟁사 가격, 프로모션, 검색광고 집행 강도, 리뷰 수량은 수시로 변동될 수 있음.",
       "타겟별 실제 구매 전환율은 브랜드몰, 네이버 쇼핑, 올리브영 등 채널별 데이터 확인이 필요함.",
       "포지셔닝맵 좌표는 전략적 가정에 기반하므로 정량 리서치 또는 전문가 평가로 보정할 필요가 있음.",
+      "오딧세이 블랙 샘플에 최적화된 mock 분석이므로 다른 브랜드를 입력할 경우 결과 신뢰도는 자동으로 낮춰 해석해야 함.",
+    ],
+    accuracySafeguards: [
+      "분석 결과를 ‘확정 결론’이 아니라 ‘검증 가능한 전략 가설’로 표시함.",
+      "공식·리테일·시장 근거를 분리해 어떤 주장이 어떤 근거에 기대고 있는지 확인 가능하게 함.",
+      "정량 데이터가 없는 항목은 High 신뢰도가 아니라 Medium 또는 Low로 표시함.",
+      "경쟁사 가격·리뷰·검색량처럼 변동성이 큰 항목은 추가 검증 과제로 분리함.",
+      "오딧세이 샘플과 다른 입력값이 들어오면 신뢰도 점수와 문구를 보수적으로 조정함.",
     ],
     validationTasks: [
       {

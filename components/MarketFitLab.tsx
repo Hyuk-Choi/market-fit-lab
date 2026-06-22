@@ -7,6 +7,7 @@ import {
   Clipboard,
   Copy,
   Download,
+  ExternalLink,
   FileText,
   Flag,
   Lightbulb,
@@ -51,6 +52,7 @@ import type {
   ProjectInput,
   RecommendationPriority,
   ScoreCardMetric,
+  SourceEvidence,
   TargetRecommendation,
   TargetSegment,
   ValidationTask,
@@ -1176,6 +1178,31 @@ function ReliabilityReview({ analysis }: { analysis: MarketingAnalysis }) {
         ))}
       </div>
 
+      <div className="min-w-0 rounded-[24px] border border-[#BFE0FF] bg-white p-4 shadow-[0_12px_34px_rgba(0,107,255,0.06)] sm:rounded-[28px] sm:p-5">
+        <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-[#006BFF]">
+              Source Evidence
+            </p>
+            <h3 className="mt-2 text-lg font-black tracking-[-0.025em] text-slate-950">
+              사실 기반 보강 근거
+            </h3>
+            <p className="mt-1 max-w-3xl text-sm font-semibold leading-6 text-slate-600">
+              공식 브랜드 페이지, 리테일 상품 노출, 시장 기사로 정성 분석의 사실 기반을 교차 확인합니다.
+              가격·리뷰·프로모션은 변동 가능성이 높아 최종 집행 전 재확인이 필요합니다.
+            </p>
+          </div>
+          <span className="w-fit rounded-full bg-[#EAF3FF] px-3 py-1 text-xs font-black text-[#006BFF]">
+            {review.sourceEvidence.length}개 근거
+          </span>
+        </div>
+        <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+          {review.sourceEvidence.map((source) => (
+            <SourceEvidenceCard key={source.sourceName} source={source} />
+          ))}
+        </div>
+      </div>
+
       <div className="grid min-w-0 gap-4 lg:grid-cols-3">
         <EvidenceListCard title="신뢰도를 높이는 요소" items={review.strengths} tone="opportunity" />
         <EvidenceListCard title="현재 분석의 한계" items={review.limitations} tone="risk" />
@@ -1191,6 +1218,12 @@ function ReliabilityReview({ analysis }: { analysis: MarketingAnalysis }) {
           </div>
         </div>
       </div>
+
+      <EvidenceListCard
+        title="정확도 과신 방지 장치"
+        items={review.accuracySafeguards}
+        tone="opportunity"
+      />
     </div>
   );
 }
@@ -1270,6 +1303,59 @@ function EvidenceListCard({
         ))}
       </ul>
     </div>
+  );
+}
+
+function SourceEvidenceCard({ source }: { source: SourceEvidence }) {
+  return (
+    <div className="min-w-0 rounded-[22px] border border-slate-200 bg-[#FAFCFF] p-4 sm:rounded-[26px]">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <SourceTypeBadge sourceType={source.sourceType} />
+            <ConfidenceBadge confidence={source.confidence} />
+          </div>
+          <h4 className="mt-3 text-base font-black text-slate-950">
+            {source.sourceName}
+          </h4>
+        </div>
+        {source.url && (
+          <a
+            href={source.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-black text-[#006BFF] ring-1 ring-blue-100 transition hover:bg-[#EAF3FF]"
+          >
+            출처 보기
+            <ExternalLink size={13} />
+          </a>
+        )}
+      </div>
+      <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">
+        <span className="font-black text-slate-950">확인 내용: </span>
+        {source.verifiedFact}
+      </p>
+      <p className="mt-3 rounded-2xl bg-white p-3 text-sm font-semibold leading-6 text-slate-700 ring-1 ring-slate-100">
+        <span className="font-black text-[#006BFF]">분석 반영: </span>
+        {source.implication}
+      </p>
+    </div>
+  );
+}
+
+function SourceTypeBadge({ sourceType }: { sourceType: SourceEvidence["sourceType"] }) {
+  return (
+    <span
+      className={cn(
+        "w-fit rounded-full px-2.5 py-1 text-[11px] font-black",
+        sourceType === "Official" && "bg-emerald-50 text-emerald-700",
+        sourceType === "Retail" && "bg-blue-50 text-blue-700",
+        sourceType === "Market" && "bg-violet-50 text-violet-700",
+        sourceType === "Internal" && "bg-slate-100 text-slate-600",
+      )}
+    >
+      {sourceType}
+    </span>
   );
 }
 
@@ -1915,6 +2001,17 @@ function MarkdownReport({ markdown }: { markdown: string }) {
               >
                 {renderInlineMarkdown(line.replace("### ", ""))}
               </h3>
+            );
+          }
+
+          if (line.startsWith("> ")) {
+            return (
+              <p
+                key={key}
+                className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-black leading-7 text-amber-800"
+              >
+                {renderInlineMarkdown(line.replace("> ", ""))}
+              </p>
             );
           }
 
