@@ -43,12 +43,17 @@ import {
   type ScoreKey,
 } from "@/lib/scoring";
 import type {
+  CompetitorRecommendation,
   CompetitorProfile,
+  EvidenceCheck,
   MarketingAnalysis,
   PositioningPoint,
   ProjectInput,
+  RecommendationPriority,
   ScoreCardMetric,
+  TargetRecommendation,
   TargetSegment,
+  ValidationTask,
 } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -59,6 +64,8 @@ type BeforeInstallPromptEvent = Event & {
 
 const sections = [
   { id: "summary", label: "Executive Summary", icon: Sparkles },
+  { id: "reliability", label: "Reliability", icon: CheckCircle2 },
+  { id: "recommendation", label: "Selection", icon: Lightbulb },
   { id: "target", label: "Target Analysis", icon: Users },
   { id: "competitor", label: "Competitor", icon: Radar },
   { id: "positioning", label: "Positioning Map", icon: Target },
@@ -117,6 +124,10 @@ const productPositioningStatement =
 const sectionDescriptions = {
   summary:
     "전체 분석 결과를 한눈에 요약합니다. 핵심 타겟, 경쟁 구도, 차별화 방향, 실행 우선순위를 빠르게 확인할 수 있습니다.",
+  reliability:
+    "입력 자료와 분석 결과가 어떤 근거와 한계 위에서 도출되었는지 검토합니다. 기획서 활용 가능성과 추가 검증 항목을 함께 확인할 수 있습니다.",
+  recommendation:
+    "타겟과 경쟁사를 우선순위별로 추천합니다. 선정 점수, 근거, 활용 방향을 기준으로 전략적 선택을 돕습니다.",
   target:
     "제품과 가장 적합한 고객군을 분석합니다. 구매 동기, 고민, 정보 탐색 채널까지 함께 판단합니다.",
   competitor:
@@ -630,6 +641,24 @@ function AnalysisSections({
       </SectionCard>
 
       <SectionCard
+        id="reliability"
+        eyebrow="Reliability Review"
+        title="분석 결과의 신뢰도와 검증 필요 항목을 점검합니다."
+        description={sectionDescriptions.reliability}
+      >
+        <ReliabilityReview analysis={analysis} />
+      </SectionCard>
+
+      <SectionCard
+        id="recommendation"
+        eyebrow="Selection Recommendation"
+        title="근거 기반으로 타겟과 경쟁사를 추천합니다."
+        description={sectionDescriptions.recommendation}
+      >
+        <RecommendationTabs analysis={analysis} />
+      </SectionCard>
+
+      <SectionCard
         id="target"
         eyebrow="Target Analysis"
         title="제품과 가장 적합한 고객군을 분석합니다."
@@ -1086,6 +1115,477 @@ function InsightBox({
       </div>
       <p className="mt-3 text-sm font-semibold leading-6 text-slate-700">{body}</p>
     </div>
+  );
+}
+
+function ReliabilityReview({ analysis }: { analysis: MarketingAnalysis }) {
+  const review = analysis.reliabilityReview;
+  const score = Math.min(Math.max(review.overallScore, 0), 100);
+  const color = getScoreColor(score);
+  const theme = scoreColorClasses[color];
+
+  return (
+    <div className="min-w-0 space-y-5">
+      <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="min-w-0 rounded-[24px] border border-[#BFE0FF] bg-[radial-gradient(circle_at_90%_10%,rgba(44,230,181,0.18),transparent_28%),linear-gradient(135deg,#F7FBFF_0%,#FFFFFF_100%)] p-5 shadow-[0_18px_46px_rgba(0,107,255,0.08)] sm:rounded-[28px] sm:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#006BFF]">
+                Confidence Score
+              </p>
+              <h3 className="mt-2 text-xl font-black tracking-[-0.025em] text-slate-950">
+                분석 신뢰도 판단
+              </h3>
+            </div>
+            <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-black", theme.badge)}>
+              {getScoreLabel(score)}
+            </span>
+          </div>
+          <div className="mt-6 flex items-end justify-between gap-4">
+            <strong className="text-5xl font-black tracking-[-0.07em] text-slate-950 sm:text-6xl">
+              {score}
+            </strong>
+            <span className={cn("mb-2 rounded-2xl px-3 py-1 text-[11px] font-black ring-1", theme.soft, theme.text, theme.ring)}>
+              100점 기준
+            </span>
+          </div>
+          <div className="mt-4 h-2.5 rounded-full bg-slate-100">
+            <div
+              className={cn("h-2.5 rounded-full bg-gradient-to-r", theme.bar)}
+              style={{ width: `${score}%` }}
+            />
+          </div>
+          <p className="mt-5 rounded-2xl bg-white/78 p-4 text-sm font-black leading-7 text-slate-800 ring-1 ring-blue-100">
+            {review.verdict}
+          </p>
+        </div>
+
+        <div className="grid min-w-0 gap-4 md:grid-cols-2">
+          <InsightBox title="신뢰도 종합 검토" body={review.summary} tone="neutral" />
+          <InsightBox
+            title="검토 기준"
+            body="입력 완성도, 타겟 근거 구체성, 경쟁사 선정 적합성, 포지셔닝 논리, 외부 데이터 검증 수준, 실행 전략 검증 가능성을 기준으로 평가함."
+            tone="primary"
+          />
+        </div>
+      </div>
+
+      <div className="grid min-w-0 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+        {review.evidenceChecks.map((check) => (
+          <EvidenceCheckCard key={check.label} check={check} />
+        ))}
+      </div>
+
+      <div className="grid min-w-0 gap-4 lg:grid-cols-3">
+        <EvidenceListCard title="신뢰도를 높이는 요소" items={review.strengths} tone="opportunity" />
+        <EvidenceListCard title="현재 분석의 한계" items={review.limitations} tone="risk" />
+        <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <CheckCircle2 size={16} className="text-[#006BFF]" />
+            <h3 className="text-sm font-black text-slate-900">추가 검증 과제</h3>
+          </div>
+          <div className="space-y-3">
+            {review.validationTasks.map((task) => (
+              <ValidationTaskCard key={task.task} task={task} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function EvidenceCheckCard({ check }: { check: EvidenceCheck }) {
+  const score = Math.min(Math.max(check.score, 0), 100);
+  const color = getScoreColor(score);
+  const theme = scoreColorClasses[color];
+
+  return (
+    <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-base font-black text-slate-950">{check.label}</h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-black", theme.badge)}>
+              {score}점 · {getScoreLabel(score)}
+            </span>
+            <ConfidenceBadge confidence={check.confidence} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 h-2 rounded-full bg-slate-100">
+        <div
+          className={cn("h-2 rounded-full bg-gradient-to-r", theme.bar)}
+          style={{ width: `${score}%` }}
+        />
+      </div>
+      <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">
+        <span className="font-black text-slate-950">검토: </span>
+        {check.finding}
+      </p>
+      <p className="mt-3 rounded-2xl bg-slate-50 p-3 text-sm font-semibold leading-6 text-slate-700">
+        <span className="font-black text-[#006BFF]">의미: </span>
+        {check.implication}
+      </p>
+    </div>
+  );
+}
+
+function EvidenceListCard({
+  title,
+  items,
+  tone,
+}: {
+  title: string;
+  items: string[];
+  tone: "opportunity" | "risk";
+}) {
+  return (
+    <div
+      className={cn(
+        "min-w-0 rounded-[24px] border p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5",
+        tone === "opportunity" && "border-[#B5F3DF] bg-[#EFFFF9]",
+        tone === "risk" && "border-rose-100 bg-rose-50",
+      )}
+    >
+      <div className="flex items-center gap-2">
+        {tone === "opportunity" ? (
+          <TrendingUp size={16} className="text-[#047857]" />
+        ) : (
+          <AlertTriangle size={16} className="text-rose-600" />
+        )}
+        <h3 className="text-sm font-black text-slate-900">{title}</h3>
+      </div>
+      <ul className="mt-4 space-y-3">
+        {items.map((item) => (
+          <li key={item} className="flex gap-2 text-sm font-semibold leading-6 text-slate-700">
+            <span
+              className={cn(
+                "mt-2.5 size-1.5 shrink-0 rounded-full",
+                tone === "opportunity" ? "bg-[#047857]" : "bg-rose-500",
+              )}
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ValidationTaskCard({ task }: { task: ValidationTask }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h4 className="text-sm font-black text-slate-950">{task.task}</h4>
+        <ValidationPriorityBadge priority={task.priority} />
+      </div>
+      <p className="mt-2 text-xs font-semibold leading-5 text-slate-600">
+        {task.reason}
+      </p>
+    </div>
+  );
+}
+
+function RecommendationTabs({ analysis }: { analysis: MarketingAnalysis }) {
+  const [activeTab, setActiveTab] = useState<"target" | "competitor">("target");
+  const recommendations = analysis.selectionRecommendations;
+
+  return (
+    <div className="min-w-0 space-y-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <InsightBox
+          title="추천 선정 원칙"
+          body={recommendations.selectionPrinciple}
+          tone="primary"
+        />
+        <InsightBox
+          title="추천 요약"
+          body={recommendations.summary}
+          tone="neutral"
+        />
+      </div>
+
+      <div className="flex flex-col gap-2 rounded-[22px] border border-blue-100 bg-[#F7FBFF] p-2 sm:flex-row sm:rounded-[26px]">
+        <button
+          type="button"
+          onClick={() => setActiveTab("target")}
+          className={cn(
+            "flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-black transition",
+            activeTab === "target"
+              ? "bg-[#006BFF] text-white shadow-lg shadow-[#006BFF]/20"
+              : "text-slate-600 hover:bg-white hover:text-[#006BFF]",
+          )}
+        >
+          <Users size={16} />
+          타겟 선정 추천
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("competitor")}
+          className={cn(
+            "flex flex-1 items-center justify-center gap-2 rounded-2xl px-4 py-3 text-sm font-black transition",
+            activeTab === "competitor"
+              ? "bg-[#006BFF] text-white shadow-lg shadow-[#006BFF]/20"
+              : "text-slate-600 hover:bg-white hover:text-[#006BFF]",
+          )}
+        >
+          <Radar size={16} />
+          경쟁사 선정 추천
+        </button>
+      </div>
+
+      {activeTab === "target" ? (
+        <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+          {recommendations.targetRecommendations.map((recommendation) => (
+            <TargetRecommendationCard
+              key={recommendation.segmentName}
+              recommendation={recommendation}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="grid min-w-0 gap-4 lg:grid-cols-2">
+          {recommendations.competitorRecommendations.map((recommendation) => (
+            <CompetitorRecommendationCard
+              key={recommendation.brandName}
+              recommendation={recommendation}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TargetRecommendationCard({
+  recommendation,
+}: {
+  recommendation: TargetRecommendation;
+}) {
+  return (
+    <RecommendationCardFrame
+      title={recommendation.segmentName}
+      label="Target Segment"
+      priority={recommendation.priority}
+      score={recommendation.selectionScore}
+      confidence={recommendation.confidence}
+      rationale={recommendation.rationale}
+      evidence={recommendation.evidence}
+      conclusionTitle="활용 방향"
+      conclusion={recommendation.recommendedUse}
+      criteria={recommendation.criteria}
+    />
+  );
+}
+
+function CompetitorRecommendationCard({
+  recommendation,
+}: {
+  recommendation: CompetitorRecommendation;
+}) {
+  return (
+    <RecommendationCardFrame
+      title={recommendation.brandName}
+      label={recommendation.role}
+      priority={recommendation.priority}
+      score={recommendation.selectionScore}
+      confidence={recommendation.confidence}
+      rationale={recommendation.rationale}
+      evidence={recommendation.evidence}
+      conclusionTitle="관찰 포인트"
+      conclusion={recommendation.watchPoint}
+      criteria={recommendation.criteria}
+    />
+  );
+}
+
+function RecommendationCardFrame({
+  title,
+  label,
+  priority,
+  score,
+  confidence,
+  rationale,
+  evidence,
+  conclusionTitle,
+  conclusion,
+  criteria,
+}: {
+  title: string;
+  label: string;
+  priority: RecommendationPriority;
+  score: number;
+  confidence: "High" | "Medium" | "Low";
+  rationale: string;
+  evidence: string[];
+  conclusionTitle: string;
+  conclusion: string;
+  criteria: ScoreCardMetric["criteria"];
+}) {
+  const normalizedScore = Math.min(Math.max(score, 0), 100);
+  const color = getScoreColor(normalizedScore);
+  const theme = scoreColorClasses[color];
+
+  return (
+    <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_12px_34px_rgba(15,23,42,0.05)] sm:rounded-[28px] sm:p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#006BFF]">
+            {label}
+          </p>
+          <h3 className="mt-2 text-xl font-black tracking-[-0.025em] text-slate-950">
+            {title}
+          </h3>
+        </div>
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <RecommendationPriorityBadge priority={priority} />
+          <ConfidenceBadge confidence={confidence} />
+        </div>
+      </div>
+      <div className="mt-5 flex items-end justify-between gap-3">
+        <strong className="text-4xl font-black tracking-[-0.07em] text-slate-950">
+          {normalizedScore}
+        </strong>
+        <span className={cn("mb-1 rounded-2xl px-3 py-1 text-[11px] font-black", theme.badge)}>
+          선정 점수 · {getScoreLabel(normalizedScore)}
+        </span>
+      </div>
+      <div className="mt-3 h-2 rounded-full bg-slate-100">
+        <div
+          className={cn("h-2 rounded-full bg-gradient-to-r", theme.bar)}
+          style={{ width: `${normalizedScore}%` }}
+        />
+      </div>
+      <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">
+        <span className="font-black text-slate-950">선정 이유: </span>
+        {rationale}
+      </p>
+      <div className="mt-4 rounded-2xl bg-[#F7FBFF] p-4">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#006BFF]">
+          Evidence
+        </p>
+        <ul className="mt-3 space-y-2">
+          {evidence.map((item) => (
+            <li key={item} className="flex gap-2 text-sm font-semibold leading-6 text-slate-700">
+              <span className="mt-2.5 size-1.5 shrink-0 rounded-full bg-[#2CE6B5]" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p className="mt-4 rounded-2xl bg-[#EAF3FF] p-3 text-sm font-black leading-6 text-[#0758D8]">
+        <span className="block text-xs uppercase tracking-[0.16em] text-[#006BFF]">
+          {conclusionTitle}
+        </span>
+        {conclusion}
+      </p>
+      <details className="group mt-4 rounded-2xl border border-slate-200 bg-white p-3">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-xs font-black text-slate-700 [&::-webkit-details-marker]:hidden">
+          <span>선정 배점 보기</span>
+          <span className={cn("rounded-full px-2 py-1", theme.soft, theme.text)}>
+            {criteria.reduce((total, criterion) => total + criterion.score, 0)}점
+          </span>
+        </summary>
+        <RecommendationCriteria criteria={criteria} barClassName={theme.bar} />
+      </details>
+    </div>
+  );
+}
+
+function RecommendationCriteria({
+  criteria,
+  barClassName,
+}: {
+  criteria: ScoreCardMetric["criteria"];
+  barClassName: string;
+}) {
+  return (
+    <div className="mt-3 space-y-3">
+      {criteria.map((criterion) => {
+        const percent = Math.min(
+          Math.max((criterion.score / criterion.maxScore) * 100, 0),
+          100,
+        );
+
+        return (
+          <div key={criterion.label}>
+            <div className="flex items-center justify-between gap-3 text-xs">
+              <span className="font-bold text-slate-600">{criterion.label}</span>
+              <span className="font-black text-slate-900">
+                {criterion.score}/{criterion.maxScore}점
+              </span>
+            </div>
+            <div className="mt-1.5 h-1.5 rounded-full bg-slate-100">
+              <div
+                className={cn("h-1.5 rounded-full bg-gradient-to-r", barClassName)}
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ConfidenceBadge({ confidence }: { confidence: "High" | "Medium" | "Low" }) {
+  return (
+    <span
+      className={cn(
+        "w-fit rounded-full px-2.5 py-1 text-[11px] font-black",
+        confidence === "High" && "bg-emerald-50 text-emerald-700",
+        confidence === "Medium" && "bg-blue-50 text-blue-700",
+        confidence === "Low" && "bg-amber-50 text-amber-700",
+      )}
+    >
+      근거 신뢰도 {confidence}
+    </span>
+  );
+}
+
+function RecommendationPriorityBadge({
+  priority,
+}: {
+  priority: RecommendationPriority;
+}) {
+  const label =
+    priority === "Primary"
+      ? "1순위"
+      : priority === "Secondary"
+        ? "2순위"
+        : "테스트";
+
+  return (
+    <span
+      className={cn(
+        "w-fit rounded-full px-2.5 py-1 text-[11px] font-black",
+        priority === "Primary" && "bg-rose-50 text-rose-700",
+        priority === "Secondary" && "bg-blue-50 text-blue-700",
+        priority === "Test" && "bg-slate-100 text-slate-600",
+      )}
+    >
+      {label}
+    </span>
+  );
+}
+
+function ValidationPriorityBadge({
+  priority,
+}: {
+  priority: "High" | "Medium" | "Low";
+}) {
+  return (
+    <span
+      className={cn(
+        "w-fit rounded-full px-2.5 py-1 text-[11px] font-black",
+        priority === "High" && "bg-rose-50 text-rose-700",
+        priority === "Medium" && "bg-amber-50 text-amber-700",
+        priority === "Low" && "bg-slate-100 text-slate-600",
+      )}
+    >
+      {priority}
+    </span>
   );
 }
 

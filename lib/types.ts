@@ -26,6 +26,47 @@ export type ScoreCardMetric = {
 
 export type ScoreCards = Record<ScoreKey, ScoreCardMetric>;
 
+export type ConfidenceLevel = "High" | "Medium" | "Low";
+
+export type EvidenceCheck = {
+  label: string;
+  score: number;
+  confidence: ConfidenceLevel;
+  finding: string;
+  implication: string;
+};
+
+export type ValidationTask = {
+  priority: "High" | "Medium" | "Low";
+  task: string;
+  reason: string;
+};
+
+export type RecommendationPriority = "Primary" | "Secondary" | "Test";
+
+export type TargetRecommendation = {
+  segmentName: string;
+  priority: RecommendationPriority;
+  selectionScore: number;
+  confidence: ConfidenceLevel;
+  rationale: string;
+  evidence: string[];
+  recommendedUse: string;
+  criteria: ScoreCriterionResult[];
+};
+
+export type CompetitorRecommendation = {
+  brandName: string;
+  role: string;
+  priority: RecommendationPriority;
+  selectionScore: number;
+  confidence: ConfidenceLevel;
+  rationale: string;
+  evidence: string[];
+  watchPoint: string;
+  criteria: ScoreCriterionResult[];
+};
+
 export type TargetSegment = {
   name: string;
   description: string;
@@ -60,6 +101,21 @@ export type MarketingAnalysis = {
     risk: string;
   };
   scoreCards: ScoreCards;
+  reliabilityReview: {
+    overallScore: number;
+    verdict: string;
+    summary: string;
+    evidenceChecks: EvidenceCheck[];
+    strengths: string[];
+    limitations: string[];
+    validationTasks: ValidationTask[];
+  };
+  selectionRecommendations: {
+    summary: string;
+    selectionPrinciple: string;
+    targetRecommendations: TargetRecommendation[];
+    competitorRecommendations: CompetitorRecommendation[];
+  };
   targetAnalysis: {
     summary: string;
     coreTarget: string;
