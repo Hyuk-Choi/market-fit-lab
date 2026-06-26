@@ -51,6 +51,28 @@ export type ValidationTask = {
   reason: string;
 };
 
+export type ResearchStageStatus = "Ready" | "Needs Validation" | "Insufficient";
+
+export type ResearchStage = {
+  stage: string;
+  score: number;
+  status: ResearchStageStatus;
+  finding: string;
+  requiredEvidence: string[];
+  impact: string;
+};
+
+export type ResearchReview = {
+  readinessScore: number;
+  verdict: string;
+  methodology: string;
+  stages: ResearchStage[];
+  minimumEvidence: string[];
+  missingEvidence: string[];
+  assumptions: string[];
+  recommendedResearch: ValidationTask[];
+};
+
 export type RecommendationPriority = "Primary" | "Secondary" | "Test";
 
 export type TargetRecommendation = {
@@ -110,6 +132,7 @@ export type MarketingAnalysis = {
     risk: string;
   };
   scoreCards: ScoreCards;
+  researchReview?: ResearchReview;
   reliabilityReview: {
     overallScore: number;
     verdict: string;

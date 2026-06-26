@@ -6,6 +6,7 @@ import type {
   MarketingAnalysis,
   PositioningPoint,
   ProjectInput,
+  ResearchReview,
   ScoreCriterionResult,
   SourceEvidence,
   TargetRecommendation,
@@ -217,8 +218,17 @@ function buildOdysseyAnalysis(input: ProjectInput): MarketingAnalysis {
   };
 
   const inputSourceEvidence = buildInputSourceEvidence(input, inputCompletenessScore);
+  const researchReview = buildResearchReview({
+    input,
+    profile: categoryProfiles[0],
+    inputCompletenessScore,
+    competitorCoverageScore,
+    scoreCards: analysis.scoreCards,
+    isValidatedSample: true,
+  });
 
   analysis.executiveSummary.oneLineInsight = `${projectName}은 ${input.currentTarget}에게 ‘간편하지만 전문적인 관리 루틴’으로 제안하는 것이 적합함.`;
+  analysis.researchReview = researchReview;
   analysis.reliabilityReview.overallScore = adjustedReliabilityScore;
   analysis.reliabilityReview.evidenceChecks = [
     inputCompletenessCheck,
@@ -240,6 +250,7 @@ function buildOdysseyAnalysis(input: ProjectInput): MarketingAnalysis {
     "오딧세이 블랙 스페셜 세트",
     projectName || "입력 제품",
   );
+  analysis.finalReport = injectResearchSection(analysis.finalReport, researchReview);
 
   return analysis;
 }
@@ -308,6 +319,14 @@ function buildAdaptiveAnalysis(input: ProjectInput): MarketingAnalysis {
     competitorCoverageScore,
     scoreCards,
   });
+  const researchReview = buildResearchReview({
+    input,
+    profile,
+    inputCompletenessScore,
+    competitorCoverageScore,
+    scoreCards,
+    isValidatedSample: false,
+  });
 
   return {
     executiveSummary: {
@@ -317,6 +336,7 @@ function buildAdaptiveAnalysis(input: ProjectInput): MarketingAnalysis {
       risk: `실시간 검색량, 리뷰 VOC, 경쟁사 가격, 실제 광고 성과가 아직 반영되지 않았으므로 본 결과는 검증 가능한 전략 가설로 활용해야 함. 특히 ${competitors[0] || "주요 경쟁사"} 대비 차별성이 흐려지면 가격 비교로 전환될 가능성이 높음.`,
     },
     scoreCards,
+    researchReview,
     reliabilityReview: {
       overallScore: reliabilityScore,
       verdict:
@@ -483,6 +503,7 @@ function buildAdaptiveAnalysis(input: ProjectInput): MarketingAnalysis {
       messages,
       actionPlan,
       reliabilityScore,
+      researchReview,
     }),
   };
 }
@@ -910,6 +931,7 @@ function buildFinalReport({
   messages,
   actionPlan,
   reliabilityScore,
+  researchReview,
 }: {
   projectName: string;
   brandName: string;
@@ -925,6 +947,7 @@ function buildFinalReport({
   messages: MarketingAnalysis["messageStrategy"]["messages"];
   actionPlan: MarketingAnalysis["actionPlan"];
   reliabilityScore: number;
+  researchReview: ResearchReview;
 }) {
   const competitorSummary =
     competitorProfiles.length > 0
@@ -943,33 +966,44 @@ ${withTopic(projectName)} ${category} 카테고리에서 ${withSubject(target)} 
 
 현재 분석은 사용자가 입력한 브랜드/제품 정보, 타겟, 경쟁사, 가격대, 핵심 기능을 바탕으로 생성한 mock analysis service 기반 전략 보고서임. 실시간 검색량, 광고 CPC, 리뷰 감성, 커머스 가격 데이터가 직접 반영된 결과는 아니므로, 실제 집행 전에는 정량 데이터 검증이 필요함.
 
-분석 신뢰도는 ${reliabilityScore}점으로 판단됨. 입력 정보와 경쟁사 커버리지가 충분할수록 기획서 초안과 캠페인 가설 수립에 활용 가능성이 높음.
+분석 신뢰도는 ${reliabilityScore}점, 리서치 준비도는 ${researchReview.readinessScore}점으로 판단됨. 입력 정보와 경쟁사 커버리지가 충분할수록 기획서 초안과 캠페인 가설 수립에 활용 가능성이 높음.
 
-## 2. 핵심 결론
+## 2. 리서치 충분성 검토
+**${researchReview.verdict}**
+
+리서치 방법론은 ${researchReview.methodology}으로 구성됨. 현재 결과물은 리서치 게이트를 통과한 항목과 추가 검증이 필요한 항목을 분리해 해석하는 것이 적합함.
+
+필수 근거 체크:
+${researchReview.minimumEvidence.map((item) => `- ${item}`).join("\n")}
+
+추가로 보완해야 할 근거:
+${researchReview.missingEvidence.map((item) => `- ${item}`).join("\n")}
+
+## 3. 핵심 결론
 **핵심 타겟은 ${target}으로 판단됨.** 이들은 ${profile.corePain}을 인지하고 있으며, ${profile.purchaseTrigger}에 의해 구매 검토가 촉발될 가능성이 높음.
 
 ${withTopic(brandName)} 경쟁사와 정면 가격 경쟁을 하기보다 **${firstFeature(uspList, profile.contentFocus)}**을 중심으로 선택 이유를 명확히 해야 함. 특히 ${profile.categoryNeed}이므로, 광고-콘텐츠-랜딩페이지의 메시지가 일관되어야 함.
 
-## 3. 핵심 타겟 정의
+## 4. 핵심 타겟 정의
 ${withTopic(target)} 문제 인식과 구매 검토 가능성이 동시에 존재하는 고객군임. 이들은 단순한 제품 설명보다 현재 불편, 기대 효과, 실패 가능성 해소 근거를 함께 확인하려는 경향이 있음.
 
 ${targetSegments
   .map((segment) => `- ${segment.name}: ${segment.reason} 적합도 ${segment.fitScore}점으로 판단됨.`)
   .join("\n")}
 
-## 4. 페르소나 요약
+## 5. 페르소나 요약
 대표 페르소나는 ${profile.personaJob} 성향의 고객으로 설정할 수 있음. 이 고객은 ${profile.personaLifestyle}을 보임.
 
 주요 고민은 ${profile.corePain}, 가격 대비 효용 불확실성, 경쟁 대안 비교 피로로 정리됨. 구매 동기는 ${profile.purchaseTrigger}이며, 구매 장벽은 ${profile.barrier}로 판단됨.
 
-## 5. 경쟁사 분석 요약
+## 6. 경쟁사 분석 요약
 ${competitors.length > 0 ? `${withObject(competitors.join(", "))} 주요 비교군으로 설정함.` : "현재 경쟁사 입력이 부족하므로 일반 카테고리 경쟁 구도로 분석함."}
 
 ${competitorSummary}
 
 따라서 ${withTopic(projectName)} 경쟁사보다 더 구체적인 사용 장면과 구매 이유를 제시해야 함. 경쟁사가 인지도나 가격을 선점하고 있을 경우, ${withTopic(brandName)} 문제 해결력과 차별화 근거를 중심으로 비교 기준을 전환하는 전략이 적합함.
 
-## 6. 포지셔닝 해석
+## 7. 포지셔닝 해석
 포지셔닝 기준은 **${positioning.xAxis}**, **${positioning.yAxis}**로 설정함.
 
 ${positioning.interpretation}
@@ -978,19 +1012,19 @@ ${positioning.interpretation}
 
 **“${withTopic(projectName)} ${withSubject(target)} 겪는 ${withObject(profile.corePain)} ${profile.contentFocus} 중심으로 해결하는 ${profile.label} 솔루션이다.”**
 
-## 7. 차별화 전략
+## 8. 차별화 전략
 차별화 전략은 기능 나열보다 고객이 바로 이해할 수 있는 구매 이유로 압축하는 것이 적합함.
 
 ${uspList.map((usp) => `- ${usp}`).join("\n")}
 
-## 8. 추천 마케팅 메시지
+## 9. 추천 마케팅 메시지
 메시지는 ${profile.corePain}을 자극하되, 과장보다 구체적 사용 장면과 검증 가능한 효익을 중심으로 설계하는 것이 적합함.
 
 ${messages
   .map((message) => `- ${message.angle}: **${message.mainCopy}** / ${message.subCopy}`)
   .join("\n")}
 
-## 9. 실행 우선순위
+## 10. 실행 우선순위
 ### High: 즉시 실행해야 하는 전략
 ${actionPlan.priorities
   .filter((item) => item.priority === "High")
@@ -1009,7 +1043,7 @@ ${actionPlan.priorities
   .map((item) => `- ${item.action}: ${item.reason}`)
   .join("\n")}
 
-## 10. 다음 액션
+## 11. 다음 액션
 1. ${profile.searchIntents.slice(0, 3).join(", ")} 중심의 검색 키워드와 콘텐츠 주제를 정리함.
 2. 상세페이지 첫 화면에 문제, 차별화 근거, CTA를 한 번에 배치함.
 3. ${competitors[0] || "주요 경쟁사"}와 비교되는 메시지를 FAQ와 비교표로 보강함.
@@ -1017,6 +1051,233 @@ ${actionPlan.priorities
 5. 리뷰 VOC, 검색량, 경쟁사 가격, 전환율 데이터를 수집해 현재 점수와 메시지를 보정함.
 
 **결론적으로 ${withTopic(productName)} ${target}의 문제를 명확히 겨냥할 경우 기획서와 캠페인 초안으로 활용 가능한 전략 방향을 확보할 수 있음. 성공 조건은 “무엇이 좋은가”보다 “왜 지금 이 고객에게 필요한가”를 더 구체적으로 설득하는 것임.**`;
+}
+
+function buildResearchReview({
+  input,
+  profile,
+  inputCompletenessScore,
+  competitorCoverageScore,
+  scoreCards,
+  isValidatedSample,
+}: {
+  input: ProjectInput;
+  profile: CategoryProfile;
+  inputCompletenessScore: number;
+  competitorCoverageScore: number;
+  scoreCards: MarketingAnalysis["scoreCards"];
+  isValidatedSample: boolean;
+}): ResearchReview {
+  const targetSpecificityScore = scoreTextDepth(input.currentTarget, 84);
+  const featureEvidenceScore = scoreTextDepth(input.keyFeatures, 88);
+  const marketContextScore = Math.min(
+    Math.round((competitorCoverageScore + scoreTextDepth(input.category, 80)) / 2),
+    100,
+  );
+  const executionClarityScore = scoreTextDepth(input.marketingGoal, 86);
+  const externalValidationScore = isValidatedSample ? 72 : 48;
+  const strategicConsistencyScore = Math.round(
+    (scoreCards.targetFitScore.score +
+      scoreCards.differentiationScore.score +
+      scoreCards.marketOpportunityScore.score) /
+      3,
+  );
+  const readinessScore = clampScore(
+    Math.round(
+      inputCompletenessScore * 0.22 +
+        competitorCoverageScore * 0.16 +
+        targetSpecificityScore * 0.14 +
+        featureEvidenceScore * 0.14 +
+        marketContextScore * 0.12 +
+        executionClarityScore * 0.1 +
+        externalValidationScore * 0.07 +
+        strategicConsistencyScore * 0.05,
+    ),
+  );
+
+  const stages = [
+    {
+      stage: "입력 근거 감사",
+      score: inputCompletenessScore,
+      status: getResearchStageStatus(inputCompletenessScore),
+      finding: buildInputCompletenessFinding(input, inputCompletenessScore),
+      requiredEvidence: [
+        "브랜드/제품명",
+        "카테고리와 가격대",
+        "제품 설명과 핵심 기능",
+        "현재 타겟과 마케팅 목표",
+      ],
+      impact:
+        "입력 근거가 충분해야 타겟, 경쟁사, USP, 실행 전략이 일반론이 아니라 제품 맥락에 맞게 생성됨.",
+    },
+    {
+      stage: "타겟 구체성 검토",
+      score: targetSpecificityScore,
+      status: getResearchStageStatus(targetSpecificityScore),
+      finding:
+        input.currentTarget.trim().length >= 12
+          ? "타겟이 연령, 니즈, 상황 중 일부를 포함해 1차 세분화가 가능한 수준으로 판단됨."
+          : "타겟 정보가 짧아 페르소나와 구매 동기 분석이 일반 고객군으로 넓어질 가능성이 있음.",
+      requiredEvidence: ["연령/직무/상황", "구매 동기", "문제 강도", "정보 탐색 채널"],
+      impact:
+        "타겟이 구체적일수록 적합도 점수와 메시지 추천이 실제 캠페인 세그먼트로 전환되기 쉬움.",
+    },
+    {
+      stage: "경쟁사 커버리지 검토",
+      score: competitorCoverageScore,
+      status: getResearchStageStatus(competitorCoverageScore),
+      finding: buildCompetitorCoverageFinding(input.competitors),
+      requiredEvidence: [
+        "직접 경쟁사 2개 이상",
+        "가격 대체재 1개 이상",
+        "기능/메시지 비교군 1개 이상",
+      ],
+      impact:
+        "경쟁사 커버리지가 낮으면 위협도, 포지셔닝맵, USP가 실제 시장보다 낙관적으로 보일 수 있음.",
+    },
+    {
+      stage: "제품 USP 근거 검토",
+      score: featureEvidenceScore,
+      status: getResearchStageStatus(featureEvidenceScore),
+      finding:
+        input.keyFeatures.trim().length >= 18
+          ? "핵심 기능과 제품 강점이 충분히 입력되어 USP와 메시지 확장에 활용 가능함."
+          : "핵심 기능 정보가 부족해 차별화 문장이 추상적으로 생성될 가능성이 있음.",
+      requiredEvidence: ["핵심 기능", "사용 장면", "가격을 정당화할 효익", "구매 장벽 해소 근거"],
+      impact:
+        "USP 근거가 구체적일수록 최종 리포트의 차별화 전략과 광고 카피가 설득력 있게 생성됨.",
+    },
+    {
+      stage: "외부 데이터 검증 준비도",
+      score: externalValidationScore,
+      status: getResearchStageStatus(externalValidationScore),
+      finding: isValidatedSample
+        ? "샘플 프로젝트는 일부 공식/리테일 근거가 포함되어 있으나, 실시간 검색량·가격·리뷰 데이터는 별도 확인이 필요함."
+        : "현재 버전은 브라우저 상태 기반 mock 분석이므로 실시간 검색량, 광고 CPC, 리뷰 VOC, 커머스 가격 데이터가 자동 반영되지 않음.",
+      requiredEvidence: ["검색량/CPC", "경쟁사 실판매가", "리뷰 VOC", "광고 A/B 테스트 결과"],
+      impact:
+        "외부 데이터 검증 전 결과물은 확정 결론이 아니라 실행 가능한 전략 가설로 해석해야 함.",
+    },
+    {
+      stage: "실행 전략 검증 가능성",
+      score: executionClarityScore,
+      status: getResearchStageStatus(executionClarityScore),
+      finding:
+        input.marketingGoal.trim().length >= 12
+          ? "마케팅 목표가 명확해 검색광고, 랜딩, 소재 테스트 등 실행 과제로 연결 가능함."
+          : "마케팅 목표가 짧아 실행 우선순위와 성과 지표가 넓게 제시될 가능성이 있음.",
+      requiredEvidence: ["캠페인 목표", "핵심 KPI", "주요 채널", "테스트 기간"],
+      impact:
+        "목표가 명확할수록 결과물이 실제 마케팅 실행 계획으로 전환되기 쉬움.",
+    },
+  ] satisfies ResearchReview["stages"];
+
+  const missingEvidence = stages
+    .filter((stage) => stage.score < 75)
+    .flatMap((stage) =>
+      stage.requiredEvidence.slice(0, 2).map((evidence) => `${stage.stage}: ${evidence}`),
+    );
+
+  const normalizedMissingEvidence =
+    missingEvidence.length > 0
+      ? missingEvidence
+      : ["실제 집행 전 검색량, 경쟁사 가격, 리뷰 VOC, 광고 성과 데이터로 최종 보정 필요"];
+
+  return {
+    readinessScore,
+    verdict: buildResearchVerdict(readinessScore),
+    methodology:
+      "입력 데이터 감사, 타겟 구체성, 경쟁사 커버리지, 제품 USP 근거, 외부 데이터 검증 준비도, 실행 전략 검증 가능성을 순차적으로 점검하는 방식",
+    stages,
+    minimumEvidence: [
+      "브랜드/제품/카테고리/가격대가 명확히 입력되어야 함",
+      "핵심 타겟의 문제, 구매 동기, 정보 탐색 채널이 확인되어야 함",
+      "직접 경쟁사와 대체재를 포함해 최소 3개 이상의 비교군이 필요함",
+      "제품 USP와 구매 장벽을 설명할 수 있는 기능·혜택 근거가 필요함",
+      "최종 의사결정 전 검색량, 가격, 리뷰, 광고 성과 데이터로 검증해야 함",
+    ],
+    missingEvidence: normalizedMissingEvidence,
+    assumptions: [
+      `${profile.label} 카테고리의 일반 구매 여정과 입력값을 결합해 분석함.`,
+      "실시간 시장 데이터가 없으므로 점수는 정량 확정값이 아니라 전략 우선순위 판단값임.",
+      "경쟁사별 가격, 채널 노출, 리뷰 수는 실제 집행 전 변동 가능성이 높음.",
+      "타겟 반응은 광고 A/B 테스트와 랜딩 전환율로 보정해야 함.",
+    ],
+    recommendedResearch: [
+      {
+        priority: "High",
+        task: "검색량·CPC·구매 의도 키워드 리서치",
+        reason:
+          "핵심 메시지와 검색광고 예산 우선순위를 확정하려면 실제 수요와 경쟁 강도를 확인해야 함.",
+      },
+      {
+        priority: "High",
+        task: "경쟁사 가격·상세페이지·리뷰 VOC 수집",
+        reason:
+          "경쟁사 대비 차별화 포인트가 실제 구매 비교 맥락에서 설득력 있는지 확인해야 함.",
+      },
+      {
+        priority: "Medium",
+        task: "타겟별 메시지 반응 A/B 테스트",
+        reason:
+          "핵심 타겟과 비교 탐색 고객이 반응하는 메시지가 다를 수 있으므로 소재별 성과 검증이 필요함.",
+      },
+      {
+        priority: "Medium",
+        task: "상세페이지 히트맵·스크롤·전환 데이터 확인",
+        reason:
+          "리포트에서 제안한 USP와 메시지가 실제 구매 여정에서 이탈을 줄이는지 확인해야 함.",
+      },
+      {
+        priority: "Low",
+        task: "브랜드 인식 및 장기 콘텐츠 리서치",
+        reason:
+          "단기 캠페인 이후 브랜드 신뢰와 재구매 기반을 강화하기 위한 장기 근거를 축적해야 함.",
+      },
+    ],
+  };
+}
+
+function injectResearchSection(report: string, researchReview: ResearchReview) {
+  const researchSection = `## 리서치 충분성 검토
+**${researchReview.verdict}**
+
+리서치 준비도는 ${researchReview.readinessScore}점으로 판단됨. 본 결과물은 ${researchReview.methodology}을 거쳐 생성된 전략 가설이며, 실제 예산 집행 전에는 아래 근거를 추가로 확인할 필요가 있음.
+
+필수 보완 근거:
+${researchReview.missingEvidence.map((item) => `- ${item}`).join("\n")}
+
+`;
+
+  return report.replace("## 2. 핵심 결론", `${researchSection}## 2. 핵심 결론`);
+}
+
+function buildResearchVerdict(score: number) {
+  if (score >= 85) {
+    return "리서치 게이트 통과: 현재 입력과 비교군만으로도 전략 보고서 초안 생성에 충분한 수준으로 판단됨.";
+  }
+  if (score >= 70) {
+    return "조건부 통과: 결과물 생성은 가능하나 일부 외부 데이터 검증을 전제로 해석해야 함.";
+  }
+  if (score >= 50) {
+    return "보완 필요: 현재 결과물은 임시 전략 가설이며, 핵심 리서치 항목을 추가 입력한 뒤 재분석하는 것이 적합함.";
+  }
+  return "생성 보류 권장: 입력 근거가 부족해 최종 보고서보다 리서치 브리프 작성이 우선되어야 함.";
+}
+
+function getResearchStageStatus(score: number) {
+  if (score >= 80) return "Ready";
+  if (score >= 60) return "Needs Validation";
+  return "Insufficient";
+}
+
+function scoreTextDepth(value: string, completeScore: number) {
+  const length = value.trim().length;
+  if (length >= 30) return completeScore;
+  if (length >= 18) return Math.max(completeScore - 8, 65);
+  if (length >= 8) return 58;
+  if (length > 0) return 42;
+  return 20;
 }
 
 function buildEvidenceChecks({

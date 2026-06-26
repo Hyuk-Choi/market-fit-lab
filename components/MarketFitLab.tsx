@@ -51,6 +51,7 @@ import type {
   PositioningPoint,
   ProjectInput,
   RecommendationPriority,
+  ResearchReview,
   ScoreCardMetric,
   SourceEvidence,
   TargetRecommendation,
@@ -66,6 +67,7 @@ type BeforeInstallPromptEvent = Event & {
 
 const sections = [
   { id: "summary", label: "Executive Summary", icon: Sparkles },
+  { id: "research", label: "Research Gate", icon: BarChart3 },
   { id: "reliability", label: "Reliability", icon: CheckCircle2 },
   { id: "recommendation", label: "Selection", icon: Lightbulb },
   { id: "target", label: "Target Analysis", icon: Users },
@@ -126,6 +128,8 @@ const productPositioningStatement =
 const sectionDescriptions = {
   summary:
     "전체 분석 결과를 한눈에 요약합니다. 핵심 타겟, 경쟁 구도, 차별화 방향, 실행 우선순위를 빠르게 확인할 수 있습니다.",
+  research:
+    "결과물 생성 전에 입력 근거, 타겟 구체성, 경쟁사 커버리지, 외부 데이터 검증 준비도를 점검합니다.",
   reliability:
     "입력 자료와 분석 결과가 어떤 근거와 한계 위에서 도출되었는지 검토합니다. 기획서 활용 가능성과 추가 검증 항목을 함께 확인할 수 있습니다.",
   recommendation:
@@ -604,11 +608,15 @@ function AnalysisSections({
               />
               <MiniConclusion
                 label="차별화 방향"
-                value="프리미엄 멀티케어 · 2종 루틴"
+                value={analysis.uspStrategy.uspList[0] ?? analysis.uspStrategy.summary}
               />
               <MiniConclusion
                 label="실행 우선"
-                value="검색광고 · 상세페이지 · 디스플레이"
+                value={analysis.actionPlan.priorities
+                  .filter((priority) => priority.priority === "High")
+                  .slice(0, 3)
+                  .map((priority) => priority.action)
+                  .join(" · ")}
               />
             </div>
           </div>
@@ -641,6 +649,17 @@ function AnalysisSections({
           className="mt-5"
         />
       </SectionCard>
+
+      {analysis.researchReview && (
+        <SectionCard
+          id="research"
+          eyebrow="Research Gate"
+          title="충분한 리서치와 근거 위에서 결과물을 생성합니다."
+          description={sectionDescriptions.research}
+        >
+          <ResearchGate review={analysis.researchReview} />
+        </SectionCard>
+      )}
 
       <SectionCard
         id="reliability"
@@ -986,6 +1005,182 @@ function MiniConclusion({ label, value }: { label: string; value: string }) {
       </p>
       <p className="mt-2 text-sm font-black leading-5 text-slate-900">{value}</p>
     </div>
+  );
+}
+
+function ResearchGate({ review }: { review: ResearchReview }) {
+  const score = Math.min(Math.max(review.readinessScore, 0), 100);
+  const color = getScoreColor(score);
+  const theme = scoreColorClasses[color];
+
+  return (
+    <div className="min-w-0 space-y-5">
+      <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="min-w-0 rounded-[24px] border border-[#BFE0FF] bg-[radial-gradient(circle_at_88%_10%,rgba(44,230,181,0.16),transparent_30%),linear-gradient(135deg,#F7FBFF_0%,#FFFFFF_100%)] p-5 shadow-[0_18px_46px_rgba(0,107,255,0.08)] sm:rounded-[28px] sm:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#006BFF]">
+                Research Readiness
+              </p>
+              <h3 className="mt-2 text-xl font-black tracking-[-0.025em] text-slate-950">
+                리서치 준비도 점수
+              </h3>
+            </div>
+            <span className={cn("w-fit rounded-full px-3 py-1 text-xs font-black", theme.badge)}>
+              {getScoreLabel(score)}
+            </span>
+          </div>
+          <div className="mt-6 flex items-end justify-between gap-4">
+            <strong className="text-5xl font-black tracking-[-0.07em] text-slate-950 sm:text-6xl">
+              {score}
+            </strong>
+            <span className={cn("mb-2 rounded-2xl px-3 py-1 text-[11px] font-black ring-1", theme.soft, theme.text, theme.ring)}>
+              Research Gate
+            </span>
+          </div>
+          <div className="mt-4 h-2.5 rounded-full bg-slate-100">
+            <div
+              className={cn("h-2.5 rounded-full bg-gradient-to-r", theme.bar)}
+              style={{ width: `${score}%` }}
+            />
+          </div>
+          <p className="mt-5 rounded-2xl bg-white/80 p-4 text-sm font-black leading-7 text-slate-800 ring-1 ring-blue-100">
+            {review.verdict}
+          </p>
+        </div>
+
+        <div className="grid min-w-0 gap-4 md:grid-cols-2">
+          <InsightBox
+            title="리서치 방법론"
+            body={review.methodology}
+            tone="primary"
+          />
+          <InsightBox
+            title="결과물 해석 기준"
+            body="리서치 게이트를 통과한 항목은 전략 보고서에 반영하고, 부족한 근거는 최종 리포트의 보완 과제로 분리해 표시합니다."
+            tone="neutral"
+          />
+        </div>
+      </div>
+
+      <div className="grid min-w-0 gap-4 md:grid-cols-2 2xl:grid-cols-3">
+        {review.stages.map((stage) => (
+          <ResearchStageCard key={stage.stage} stage={stage} />
+        ))}
+      </div>
+
+      <div className="grid min-w-0 gap-4 lg:grid-cols-3">
+        <EvidenceListCard
+          title="최소 필요 근거"
+          items={review.minimumEvidence}
+          tone="opportunity"
+        />
+        <EvidenceListCard
+          title="부족하거나 추가 확인할 근거"
+          items={review.missingEvidence}
+          tone="risk"
+        />
+        <EvidenceListCard
+          title="현재 분석의 전제"
+          items={review.assumptions}
+          tone="opportunity"
+        />
+      </div>
+
+      <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <CheckCircle2 size={16} className="text-[#006BFF]" />
+          <h3 className="text-sm font-black text-slate-900">
+            결과물 품질을 높이기 위한 리서치 액션
+          </h3>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          {review.recommendedResearch.map((task) => (
+            <ValidationTaskCard key={task.task} task={task} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResearchStageCard({
+  stage,
+}: {
+  stage: ResearchReview["stages"][number];
+}) {
+  const score = Math.min(Math.max(stage.score, 0), 100);
+  const color = getScoreColor(score);
+  const theme = scoreColorClasses[color];
+
+  return (
+    <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.04)] sm:rounded-[28px] sm:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-base font-black text-slate-950">{stage.stage}</h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-black", theme.badge)}>
+              {score}점 · {getScoreLabel(score)}
+            </span>
+            <ResearchStatusBadge status={stage.status} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 h-2 rounded-full bg-slate-100">
+        <div
+          className={cn("h-2 rounded-full bg-gradient-to-r", theme.bar)}
+          style={{ width: `${score}%` }}
+        />
+      </div>
+      <p className="mt-4 text-sm font-semibold leading-6 text-slate-700">
+        {stage.finding}
+      </p>
+      <div className="mt-4 rounded-2xl bg-[#F7FBFF] p-3">
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#006BFF]">
+          Required Evidence
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {stage.requiredEvidence.map((item) => (
+            <span
+              key={item}
+              className="rounded-full bg-white px-2.5 py-1 text-[11px] font-bold text-slate-600 ring-1 ring-blue-100"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+      <p className="mt-3 rounded-2xl bg-slate-50 p-3 text-sm font-semibold leading-6 text-slate-700">
+        <span className="font-black text-[#006BFF]">분석 영향: </span>
+        {stage.impact}
+      </p>
+    </div>
+  );
+}
+
+function ResearchStatusBadge({
+  status,
+}: {
+  status: ResearchReview["stages"][number]["status"];
+}) {
+  const label =
+    status === "Ready"
+      ? "충분"
+      : status === "Needs Validation"
+        ? "검증 필요"
+        : "부족";
+
+  return (
+    <span
+      className={cn(
+        "w-fit rounded-full px-2.5 py-1 text-[11px] font-black",
+        status === "Ready" && "bg-emerald-50 text-emerald-700",
+        status === "Needs Validation" && "bg-amber-50 text-amber-700",
+        status === "Insufficient" && "bg-rose-50 text-rose-700",
+      )}
+    >
+      {label}
+    </span>
   );
 }
 
