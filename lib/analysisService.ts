@@ -521,67 +521,164 @@ function buildAdaptiveScoreCards({
   competitors: string[];
   priceTier: PriceTier;
 }): MarketingAnalysis["scoreCards"] {
-  const featureBonus = Math.min(features.length, 5);
   const competitorScore = calculateCompetitorCoverage(input.competitors);
-  const hasSpecificTarget = input.currentTarget.trim().length >= 8;
+  const targetDepth = scoreTextDepth(input.currentTarget, 90);
+  const descriptionDepth = scoreTextDepth(input.productDescription, 88);
+  const featureDepth = scoreTextDepth(input.keyFeatures, 92);
+  const categoryDepth = scoreTextDepth(input.category, 84);
+  const goalDepth = scoreTextDepth(input.marketingGoal, 86);
+  const productEvidence = weightedAverage([descriptionDepth, featureDepth, categoryDepth], [0.4, 0.4, 0.2]);
+  const targetEvidence = weightedAverage([targetDepth, goalDepth], [0.65, 0.35]);
+  const competitiveEvidence = weightedAverage([competitorScore, featureDepth], [0.65, 0.35]);
   const premiumPenalty = priceTier === "premium" ? 2 : 0;
 
   const targetCriteria = [
-    criterion("문제 강도", 25, 18 + (hasSpecificTarget ? 4 : 1) + (featureBonus >= 3 ? 2 : 0)),
-    criterion("구매력", 20, getPurchasingPowerScore(input.currentTarget, priceTier)),
-    criterion("제품 필요성", 25, 17 + featureBonus + (input.productDescription.length > 24 ? 3 : 1)),
-    criterion("광고 도달 가능성", 15, 10 + Math.min(profile.mediaChannels.length, 4)),
-    criterion("반복 구매 가능성", 15, getRepeatScore(profile.key, priceTier)),
+    criterion(
+      "문제 강도",
+      25,
+      scoreByEvidence(
+        25,
+        weightedAverage([targetDepth, descriptionDepth, goalDepth], [0.5, 0.3, 0.2]),
+      ),
+    ),
+    criterion(
+      "구매력",
+      20,
+      getPurchasingPowerScore(input.currentTarget, priceTier) * evidenceMultiplier(targetDepth, 0.28),
+    ),
+    criterion(
+      "제품 필요성",
+      25,
+      scoreByEvidence(25, weightedAverage([descriptionDepth, featureDepth], [0.45, 0.55])),
+    ),
+    criterion(
+      "광고 도달 가능성",
+      15,
+      (10 + Math.min(profile.mediaChannels.length, 4)) * evidenceMultiplier(targetEvidence, 0.24),
+    ),
+    criterion(
+      "반복 구매 가능성",
+      15,
+      getRepeatScore(profile.key, priceTier) * evidenceMultiplier(productEvidence, 0.3),
+    ),
   ];
 
   const competitorCriteria = [
-    criterion("브랜드 인지도", 25, 15 + Math.min(competitors.length * 2, 8)),
-    criterion("제품 유사도", 25, competitors.length >= 3 ? 21 : competitors.length === 2 ? 18 : 14),
-    criterion("가격 경쟁력", 15, priceTier === "low" ? 13 : priceTier === "mid" ? 12 : 10),
-    criterion("채널 장악력", 20, 12 + Math.min(competitors.length * 2, 6)),
-    criterion("메시지 명확성", 15, 10 + (competitors.length >= 3 ? 3 : 1)),
+    criterion("브랜드 인지도", 25, scoreByEvidence(25, competitorScore, 4)),
+    criterion(
+      "제품 유사도",
+      25,
+      competitors.length >= 3 ? 21 : competitors.length === 2 ? 17 : competitors.length === 1 ? 11 : 6,
+    ),
+    criterion(
+      "가격 경쟁력",
+      15,
+      (priceTier === "low" ? 13 : priceTier === "mid" ? 12 : 10) *
+        evidenceMultiplier(competitorScore, 0.28),
+    ),
+    criterion("채널 장악력", 20, scoreByEvidence(20, competitorScore, 4)),
+    criterion(
+      "메시지 명확성",
+      15,
+      competitors.length >= 3 ? 12 : competitors.length === 2 ? 10 : competitors.length === 1 ? 7 : 4,
+    ),
   ];
 
   const differentiationCriteria = [
-    criterion("USP 명확성", 30, 20 + featureBonus + (input.keyFeatures.length > 20 ? 3 : 0)),
-    criterion("경쟁사 대비 차별성", 30, 18 + featureBonus + (competitorScore >= 80 ? 4 : 1) - premiumPenalty),
-    criterion("타겟 고민과의 연결성", 25, 17 + (hasSpecificTarget ? 4 : 1) + (input.marketingGoal.length > 16 ? 2 : 0)),
-    criterion("메시지 확장성", 15, 10 + Math.min(featureBonus, 4)),
+    criterion("USP 명확성", 30, scoreByEvidence(30, featureDepth, 5)),
+    criterion("경쟁사 대비 차별성", 30, scoreByEvidence(30, competitiveEvidence, 4) - premiumPenalty),
+    criterion(
+      "타겟 고민과의 연결성",
+      25,
+      scoreByEvidence(25, weightedAverage([targetDepth, featureDepth, goalDepth], [0.45, 0.35, 0.2]), 4),
+    ),
+    criterion("메시지 확장성", 15, scoreByEvidence(15, weightedAverage([featureDepth, goalDepth], [0.6, 0.4]), 3)),
   ];
 
   const opportunityCriteria = [
-    criterion("카테고리 성장성", 25, getCategoryGrowthScore(profile.key)),
-    criterion("타겟 수요 강도", 25, 17 + (hasSpecificTarget ? 4 : 1) + (input.marketingGoal.length > 16 ? 2 : 0)),
-    criterion("경쟁 공백", 20, 12 + (competitorScore >= 80 ? 4 : 2) + (featureBonus >= 3 ? 2 : 0)),
-    criterion("채널 확장 가능성", 15, 10 + Math.min(profile.mediaChannels.length, 4)),
-    criterion("콘텐츠 확장 가능성", 15, 10 + Math.min(featureBonus, 4)),
+    criterion("카테고리 성장성", 25, getCategoryGrowthScore(profile.key) * evidenceMultiplier(categoryDepth, 0.25)),
+    criterion("타겟 수요 강도", 25, scoreByEvidence(25, targetEvidence, 4)),
+    criterion("경쟁 공백", 20, scoreByEvidence(20, weightedAverage([competitorScore, featureDepth], [0.55, 0.45]), 3)),
+    criterion("채널 확장 가능성", 15, scoreByEvidence(15, weightedAverage([categoryDepth, targetDepth], [0.45, 0.55]), 3)),
+    criterion("콘텐츠 확장 가능성", 15, scoreByEvidence(15, weightedAverage([descriptionDepth, featureDepth], [0.45, 0.55]), 3)),
   ];
+  const targetFitScore = sumCriteria(targetCriteria);
+  const competitorThreatScore = sumCriteria(competitorCriteria);
+  const differentiationScore = sumCriteria(differentiationCriteria);
+  const marketOpportunityScore = sumCriteria(opportunityCriteria);
 
   return {
     targetFitScore: {
-      score: sumCriteria(targetCriteria),
-      reason: `${withTopic(input.currentTarget || profile.defaultTarget)} ${withObject(profile.corePain)} 인지할 가능성이 높고, 입력된 제품 특징과 구매 동기가 연결되어 타겟 적합도가 높게 판단됨.`,
+      score: targetFitScore,
+      reason: buildTargetFitReason(targetFitScore, input, profile),
       criteria: targetCriteria,
     },
     competitorThreatScore: {
-      score: sumCriteria(competitorCriteria),
-      reason:
-        competitors.length >= 3
-          ? `${competitors.slice(0, 3).join(", ")} 등 입력 경쟁사가 충분해 구매 고려 단계에서 대체 선택지로 작동할 가능성이 높음. 위협도는 높지만 비교 메시지를 설계하기에도 적합함.`
-          : "경쟁사 입력이 적어 실제 위협도는 보수적으로 산정됨. 직접 경쟁사와 가격 비교군을 추가하면 분석 정확도가 높아짐.",
+      score: competitorThreatScore,
+      reason: buildCompetitorThreatReason(competitorThreatScore, competitors),
       criteria: competitorCriteria,
     },
     differentiationScore: {
-      score: sumCriteria(differentiationCriteria),
-      reason: `${withObject(firstFeature(features, profile.contentFocus))} 중심으로 USP를 압축하면 경쟁사 대비 선택 이유를 명확히 만들 수 있음.`,
+      score: differentiationScore,
+      reason: buildDifferentiationReason(differentiationScore, features, profile),
       criteria: differentiationCriteria,
     },
     marketOpportunityScore: {
-      score: sumCriteria(opportunityCriteria),
-      reason: `${profile.label}에서는 ${profile.searchIntents.slice(0, 3).join(", ")} 수요가 존재하므로, 검색·콘텐츠·상세페이지를 연결한 실행 전략의 기회가 존재함.`,
+      score: marketOpportunityScore,
+      reason: buildMarketOpportunityReason(marketOpportunityScore, profile),
       criteria: opportunityCriteria,
     },
   };
+}
+
+function buildTargetFitReason(
+  score: number,
+  input: ProjectInput,
+  profile: CategoryProfile,
+) {
+  const target = input.currentTarget || profile.defaultTarget;
+
+  if (score < 50) {
+    return "타겟, 제품 설명, 마케팅 목표 근거가 부족해 타겟 적합도는 낮게 판단됨. 핵심 고객의 문제, 구매 동기, 정보 탐색 채널을 보완해야 함.";
+  }
+  if (score < 70) {
+    return `${withTopic(target)} 기본 니즈는 추정되지만, 제품 필요성과 구매 동기가 충분히 연결되지 않아 보완 분석이 필요함.`;
+  }
+  return `${withTopic(target)} ${withObject(profile.corePain)} 인지할 가능성이 높고, 입력된 제품 특징과 구매 동기가 연결되어 타겟 적합도가 높게 판단됨.`;
+}
+
+function buildCompetitorThreatReason(score: number, competitors: string[]) {
+  if (competitors.length === 0) {
+    return "경쟁사가 입력되지 않아 실제 위협도는 낮은 신뢰도로 산정됨. 직접 경쟁사, 가격 대체재, 기능 비교군을 추가해야 함.";
+  }
+  if (score < 70) {
+    return `${competitors.join(", ")} 비교군이 입력되었으나 커버리지가 제한적이므로 위협도는 보수적으로 해석해야 함.`;
+  }
+  return `${competitors.slice(0, 3).join(", ")} 등 입력 경쟁사가 충분해 구매 고려 단계에서 대체 선택지로 작동할 가능성이 높음. 위협도는 높지만 비교 메시지를 설계하기에도 적합함.`;
+}
+
+function buildDifferentiationReason(
+  score: number,
+  features: string[],
+  profile: CategoryProfile,
+) {
+  if (score < 50) {
+    return "핵심 기능과 경쟁사 대비 차별 근거가 부족해 USP는 아직 기획서 문장으로 확정하기 어려움.";
+  }
+  if (score < 70) {
+    return `${withObject(firstFeature(features, profile.contentFocus))} 중심의 차별화 가능성은 있으나, 구매 장벽을 해소할 구체 근거를 추가해야 함.`;
+  }
+  return `${withObject(firstFeature(features, profile.contentFocus))} 중심으로 USP를 압축하면 경쟁사 대비 선택 이유를 명확히 만들 수 있음.`;
+}
+
+function buildMarketOpportunityReason(score: number, profile: CategoryProfile) {
+  if (score < 50) {
+    return "카테고리, 타겟, 경쟁 공백 근거가 부족해 시장 기회는 아직 판단 보류가 적합함.";
+  }
+  if (score < 70) {
+    return `${profile.label}의 기본 수요는 존재하나, 검색량·경쟁사·콘텐츠 확장 근거를 추가해야 기회 크기를 판단할 수 있음.`;
+  }
+  return `${profile.label}에서는 ${profile.searchIntents.slice(0, 3).join(", ")} 수요가 존재하므로, 검색·콘텐츠·상세페이지를 연결한 실행 전략의 기회가 존재함.`;
 }
 
 function buildCompetitorProfiles({
@@ -599,6 +696,7 @@ function buildCompetitorProfiles({
     competitors.length > 0
       ? competitors
       : ["카테고리 리더 후보", "가격 대체재 후보", "기능 특화 후보"];
+  const hasInputCompetitors = competitors.length > 0;
 
   return names.slice(0, 5).map((name, index) => {
     const role = profile.competitorRoles[index % profile.competitorRoles.length];
@@ -610,11 +708,15 @@ function buildCompetitorProfiles({
       priceLevel: getCompetitorPriceLevel(priceTier, index),
       usp: `${role} 역할을 하는 ${profile.label} 내 주요 비교군`,
       strength:
-        index === 0
+        !hasInputCompetitors
+          ? "실제 브랜드가 입력되지 않아 경쟁 역할 후보로만 해석해야 함"
+          : index === 0
           ? "인지도와 기존 고객 신뢰를 기반으로 구매 고려 단계에서 먼저 떠오를 가능성이 높음"
           : `${role} 관점에서 특정 고객군의 비교 기준을 만들 가능성이 있음`,
       weakness:
-        "입력 제품이 더 구체적인 문제 해결 장면과 차별화 근거를 제시하면 전환 단계에서 방어 가능함",
+        hasInputCompetitors
+          ? "입력 제품이 더 구체적인 문제 해결 장면과 차별화 근거를 제시하면 전환 단계에서 방어 가능함"
+          : "실제 가격, 리뷰, 채널 근거가 없으므로 구체 경쟁사 입력 후 재분석이 필요함",
       threatScore,
       messageTone: tone,
       channel: profile.mediaChannels.slice(0, 4).join(", "),
@@ -635,6 +737,7 @@ function buildTargetRecommendations({
 }): TargetRecommendation[] {
   const baseCriteria = scoreCards.targetFitScore.criteria;
   const primaryScore = scoreCards.targetFitScore.score;
+  const isPrimaryReady = primaryScore >= 70;
 
   return [
     {
@@ -642,15 +745,25 @@ function buildTargetRecommendations({
       priority: "Primary",
       selectionScore: primaryScore,
       confidence: getConfidenceByScore(primaryScore),
-      rationale: `${profile.corePain}이 뚜렷하고 ${profile.purchaseTrigger}에 반응할 가능성이 높아 1순위 전환 타겟으로 판단됨.`,
+      rationale: isPrimaryReady
+        ? `${profile.corePain}이 뚜렷하고 ${profile.purchaseTrigger}에 반응할 가능성이 높아 1순위 전환 타겟으로 판단됨.`
+        : "현재 입력만으로는 1순위 전환 타겟을 확정하기 어렵고, 문제 강도·구매 동기·채널 근거를 추가한 뒤 우선순위를 재평가해야 함.",
       evidence: [
-        `제품 설명에서 ${input.productDescription || profile.categoryNeed}이 확인됨.`,
-        `핵심 기능은 ${input.keyFeatures || profile.contentFocus}으로 정리됨.`,
-        `마케팅 목표가 ${input.marketingGoal || "신규 유입과 전환 개선"}에 맞춰져 있음.`,
+        input.productDescription
+          ? `제품 설명에서 ${input.productDescription}이 확인됨.`
+          : "제품 설명이 비어 있어 카테고리 일반 니즈로만 추정됨.",
+        input.keyFeatures
+          ? `핵심 기능은 ${input.keyFeatures}으로 정리됨.`
+          : "핵심 기능이 비어 있어 USP 근거 보강이 필요함.",
+        input.marketingGoal
+          ? `마케팅 목표가 ${input.marketingGoal}에 맞춰져 있음.`
+          : "마케팅 목표가 비어 있어 실행 우선순위가 넓게 제시될 수 있음.",
         `${profile.mediaChannels.slice(0, 3).join(", ")} 채널로 도달 가능성이 있음.`,
       ],
       recommendedUse:
-        "검색광고, 상세페이지 첫 화면, 리타겟팅 전환 소재의 1순위 타겟으로 운영하는 것이 적합함.",
+        isPrimaryReady
+          ? "검색광고, 상세페이지 첫 화면, 리타겟팅 전환 소재의 1순위 타겟으로 운영하는 것이 적합함."
+          : "즉시 집행 타겟으로 확정하기보다 리서치 브리프와 고객 인터뷰 가설로 먼저 활용하는 것이 적합함.",
       criteria: baseCriteria,
     },
     {
@@ -718,16 +831,19 @@ function buildCompetitorRecommendations({
 }): MarketingAnalysis["selectionRecommendations"]["competitorRecommendations"] {
   return competitorProfiles.map((competitor, index) => {
     const selectionScore = clampScore(competitor.threatScore + 3);
+    const hasInputCompetitor = competitors.length > index;
 
     return {
       brandName: competitor.name,
       role: profile.competitorRoles[index % profile.competitorRoles.length],
       priority: index < 2 ? "Primary" : index < 4 ? "Secondary" : "Test",
       selectionScore,
-      confidence: competitors.length > index ? getConfidenceByScore(selectionScore) : "Low",
+      confidence: hasInputCompetitor ? getConfidenceByScore(selectionScore) : "Low",
       rationale: `${withTopic(competitor.name)} ${competitor.usp}으로 설정할 수 있어 포지셔닝과 메시지 비교에 유용함.`,
       evidence: [
-        `입력 경쟁사 목록에서 ${competitor.name}이 확인됨.`,
+        hasInputCompetitor
+          ? `입력 경쟁사 목록에서 ${competitor.name}이 확인됨.`
+          : `${competitor.name}는 실제 브랜드가 아니라 경쟁 역할을 채우기 위한 후보명이므로 구체 브랜드 입력이 필요함.`,
         `${competitor.messageTone} 메시지 톤을 가진 비교군으로 분석됨.`,
         `${competitor.channel} 채널에서 비교 노출 가능성을 점검할 필요가 있음.`,
       ],
@@ -1082,7 +1198,7 @@ function buildResearchReview({
       scoreCards.marketOpportunityScore.score) /
       3,
   );
-  const readinessScore = clampScore(
+  const rawReadinessScore = clampScore(
     Math.round(
       inputCompletenessScore * 0.22 +
         competitorCoverageScore * 0.16 +
@@ -1094,6 +1210,9 @@ function buildResearchReview({
         strategicConsistencyScore * 0.05,
     ),
   );
+  const externalValidationCap =
+    externalValidationScore < 60 ? 74 : externalValidationScore < 75 ? 84 : 100;
+  const readinessScore = Math.min(rawReadinessScore, externalValidationCap);
 
   const stages = [
     {
@@ -1275,9 +1394,10 @@ function scoreTextDepth(value: string, completeScore: number) {
   const length = value.trim().length;
   if (length >= 30) return completeScore;
   if (length >= 18) return Math.max(completeScore - 8, 65);
-  if (length >= 8) return 58;
-  if (length > 0) return 42;
-  return 20;
+  if (length >= 10) return Math.max(completeScore - 16, 62);
+  if (length >= 6) return 58;
+  if (length > 0) return 38;
+  return 18;
 }
 
 function buildEvidenceChecks({
@@ -1367,10 +1487,11 @@ function buildReliabilityScore({
       scoreCards.marketOpportunityScore.score) /
       4,
   );
-
-  return clampScore(
-    Math.round(inputCompletenessScore * 0.35 + competitorCoverageScore * 0.25 + scoreAverage * 0.25 + 12),
+  const rawScore = Math.round(
+    inputCompletenessScore * 0.35 + competitorCoverageScore * 0.25 + scoreAverage * 0.25 + 12,
   );
+
+  return clampScore(Math.min(rawScore, 84));
 }
 
 function buildInputSourceEvidence(
@@ -1481,6 +1602,26 @@ function lowerCriteria(criteria: ScoreCriterionResult[], amount: number) {
 
 function sumCriteria(criteria: ScoreCriterionResult[]) {
   return criteria.reduce((total, item) => total + item.score, 0);
+}
+
+function weightedAverage(values: number[], weights: number[]) {
+  const weightTotal = weights.reduce((total, weight) => total + weight, 0);
+  if (weightTotal === 0) return 0;
+
+  return Math.round(
+    values.reduce((total, value, index) => total + value * (weights[index] || 0), 0) /
+      weightTotal,
+  );
+}
+
+function scoreByEvidence(maxScore: number, evidenceScore: number, floorScore = 0) {
+  return Math.round(
+    floorScore + (maxScore - floorScore) * (clampScore(evidenceScore) / 100),
+  );
+}
+
+function evidenceMultiplier(evidenceScore: number, floor = 0.25) {
+  return floor + (clampScore(evidenceScore) / 100) * (1 - floor);
 }
 
 function firstFeature(features: string[], fallback: string) {
